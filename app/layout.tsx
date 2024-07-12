@@ -1,10 +1,26 @@
 import type { Metadata } from "next";
-import { Inter } from "next/font/google";
+import { Righteous, Roboto } from "next/font/google";
 import { ClerkProvider } from "@clerk/nextjs";
 
 import "./globals.css";
 
-const inter = Inter({ subsets: ["latin"] });
+const roboto = Roboto({
+  subsets: ["latin"],
+  weight: "400",
+  variable: "--roboto-font",
+});
+
+const robotoLight = Roboto({
+  subsets: ["latin"],
+  weight: "300",
+  variable: "--roboto-light-font",
+});
+
+const righteous = Righteous({
+  subsets: ["latin"],
+  weight: "400",
+  variable: "--righteous-font",
+});
 
 export const metadata: Metadata = {
   title: "Next.js PXCI starter",
@@ -19,7 +35,11 @@ export default function RootLayout({
   return (
     <ClerkProvider>
       <html lang="en">
-        <body className={inter.className}>{children}</body>
+        <body
+          className={`${roboto.variable} ${robotoLight.variable} ${righteous.variable}`}
+        >
+          {children}
+        </body>
       </html>
     </ClerkProvider>
   );

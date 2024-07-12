@@ -1,5 +1,5 @@
-import { messageSent } from "./functions";
+import { askAI } from "./functions";
 
-export const functions = [messageSent];
+export const functions = [askAI];
 
 export { inngest } from "./client";

@@ -17,13 +17,70 @@ datasource db {
   shadowDatabaseUrl = env("SHADOW_DATABASE_URL")
 }
 
-model messages {
+model Messages {
   text   String
   author String
 
   // xata fields
   xata_updatedat DateTime @default(now()) @db.Timestamptz(6)
   xata_id        String   @unique(map: "_pgroll_users_xata_id_key") @default(dbgenerated("('rec_'::text || (xata_private.xid())::text)"))
+  xata_version   Int      @default(0)
+  xata_createdat DateTime @default(now()) @db.Timestamptz(6)
+}
+
+
+model MealPlan {
+  name   String
+  user   String
+  days   DaysOfTheWeek[]
+
+  // xata fields
+  xata_updatedat DateTime @default(now()) @db.Timestamptz(6)
+  xata_id        String   @unique(map: "_pgroll_meal_plan_xata_id_key") @default(dbgenerated("('rec_'::text || (xata_private.xid())::text)"))
+  xata_version   Int      @default(0)
+  xata_createdat DateTime @default(now()) @db.Timestamptz(6)
+}
+
+
+model DaysOfTheWeek {
+  
+  name       String   // Monday, Tuesday, etc.
+  mealPlanId String
+  mealPlan   MealPlan @relation(fields: [mealPlanId], references: [xata_id])
+  meals      DayMeals[]
+
+  // xata fields
+  xata_updatedat DateTime @default(now()) @db.Timestamptz(6)
+  xata_id        String   @unique(map: "_pgroll_days_of_the_week_xata_id_key") @default(dbgenerated("('rec_'::text || (xata_private.xid())::text)"))
+  xata_version   Int      @default(0)
+  xata_createdat DateTime @default(now()) @db.Timestamptz(6)
+}
+
+model DayMeals {
+  type   String // breakfast, lunch, dinner
+  dayId  String
+  day    DaysOfTheWeek    @relation(fields: [dayId], references: [xata_id])
+  mealId String
+  meal   Meals   @relation(fields: [mealId], references: [xata_id])
+
+  // xata fields
+  xata_updatedat DateTime @default(now()) @db.Timestamptz(6)
+  xata_id        String   @unique(map: "_pgroll_day_meal_xata_id_key") @default(dbgenerated("('rec_'::text || (xata_private.xid())::text)"))
+  xata_version   Int      @default(0)
+  xata_createdat DateTime @default(now()) @db.Timestamptz(6)
+}
+
+model Meals {
+  
+  name         String
+  cooking_time Int      // in minutes
+  prep_time    Int      // in minutes
+  kcal         Int      // in kcal
+  dayMealss     DayMeals[]
+
+  // xata fields
+  xata_updatedat DateTime @default(now()) @db.Timestamptz(6)
+  xata_id        String   @unique(map: "_pgroll_meal_xata_id_key") @default(dbgenerated("('rec_'::text || (xata_private.xid())::text)"))
   xata_version   Int      @default(0)
   xata_createdat DateTime @default(now()) @db.Timestamptz(6)
 }

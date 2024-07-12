@@ -6,11 +6,22 @@ const OPENAI_API_KEY = process.env.OPENAI_API_KEY;
 // Functions exported from this file are exposed to Inngest
 // See: @/app/api/inngest/route.ts
 
-export const messageSent = inngest.createFunction(
-  { id: "message-sent" }, // Each function should have a unique ID
-  { event: "app/message.sent" }, // When an event by this name received, this function will run
+export const askAI = inngest.createFunction(
+  { id: "ask-ai-for-a-meal-plan-idea", retries: 1 }, // Each function should have a unique ID
+  { event: "app/ask.ai" }, // When an event by this name received, this function will run
 
   async ({ event, step, prisma }) => {
+    // Fetch mesage count to see if still eligible
+    const messageCount = await prisma.messages.count({
+      where: {
+        author: event.data.author,
+      },
+    });
+
+    if (messageCount > 50) {
+      return { error: "You have exhausted your 10 messages included" };
+    }
+
     // Fetch data from the database
     const message = await prisma.messages.findUnique({
       where: {
@@ -19,7 +30,7 @@ export const messageSent = inngest.createFunction(
     });
 
     if (!message) {
-      return;
+      return { error: "Message could not be found" };
     }
 
     // You can execute code that interacts with external services
@@ -32,27 +43,28 @@ export const messageSent = inngest.createFunction(
           messages: [
             {
               role: "system",
-              content:
-                "You are a helpful assistant. Create a funny reply to my message:",
+              content: `Only answer with a json in the following format:
+  {
+    [key: meal of the day as string]: {
+      "recipe_name": string,
+      "prep_time": number in minutes,
+      "cooking_time": number in minutes,
+      "calories": number as kcal
+    }
+  }. Suggest a meal plan for a day containing breakfast, lunch and dinner, as follows:`,
             },
             { role: "user", content: message?.text },
           ],
           model: "gpt-3.5-turbo",
         });
-        return (
-          completion.choices[0]?.message.content ?? "Unexpected OpenAI response"
-        );
+        return completion.choices[0]?.message.content
+          ? JSON.parse(completion.choices[0]?.message.content)
+          : { error: "Unexpected OpenAI response" };
       } else {
         return "Add OPENAI_API_KEY environment variable to get AI responses.";
       }
     });
 
-    const newMessage = await step.run("add-reply-to-message", async () => {
-      return await prisma.messages.create({
-        data: { text: reply, author: "AI" },
-      });
-    });
-
-    return { event, body: `Here's your last message: ${newMessage?.text}!` };
+    return { event, body: reply };
   }
 );

@@ -1,4 +1,4 @@
-import { UserButton } from "@clerk/nextjs";
+import { SignInButton, SignedIn, SignedOut, UserButton } from "@clerk/nextjs";
 import Form from "./Form";
 
 import { prisma } from "@/prisma/client";
@@ -13,12 +13,14 @@ export async function create(message: string, userId: string) {
     data: { text: message, author: userId },
   });
 
-  await inngest.send({
-    name: "app/message.sent",
+  const aiResponse = await inngest.send({
+    name: "app/ask.ai",
     data: {
       messageId: createdMessage.xata_id,
     },
   });
+
+  return aiResponse;
 }
 
 export default async function DashboardPage() {
@@ -26,88 +28,29 @@ export default async function DashboardPage() {
     orderBy: { xata_createdat: "desc" },
   });
   return (
-    <main className="flex min-h-screen flex-col items-center justify-between p-24">
-      <div className="flex w-2/3 justify-end pr-12">
-        <UserButton />
-      </div>
-      <Form create={create} latestMessage={message} />
-
-      <div className="mb-32 mt-20 grid text-center lg:mb-0 lg:w-full lg:max-w-5xl lg:grid-cols-4 lg:text-left">
-        <a
-          href="https://www.prisma.io/docs"
-          className="group rounded-lg border border-transparent px-5 py-4 transition-colors hover:border-gray-300 hover:bg-gray-100 hover:dark:border-neutral-700 hover:dark:bg-neutral-800/30"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <h2 className="mb-3 text-2xl font-semibold">
-            Prisma Docs{" "}
-            <span className="inline-block transition-transform group-hover:translate-x-1 motion-reduce:transform-none">
-              -&gt;
-            </span>
-          </h2>
-          <p className="m-0 max-w-[30ch] text-sm opacity-50">
-            Prisma ORM is an open source Node.js and TypeScript ORM with a
-            readable data model, automated migrations, type-safety &
-            auto-completion.
-          </p>
-        </a>
-
-        <a
-          href="https://xata.io/docs"
-          className="group rounded-lg border border-transparent px-5 py-4 transition-colors hover:border-gray-300 hover:bg-gray-100 hover:dark:border-neutral-700 hover:dark:bg-neutral-800/30"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <h2 className="mb-3 text-2xl font-semibold">
-            Xata Docs{" "}
-            <span className="inline-block transition-transform group-hover:translate-x-1 motion-reduce:transform-none">
-              -&gt;
-            </span>
-          </h2>
-          <p className="m-0 max-w-[30ch] text-sm opacity-50">
-            Xata is a serverless data platform, providing a full-text and vector
-            search engine, record-level file attachments, table-level
-            aggregations and an optional ask endpoint to engage with with
-            OpenAI's ChatGPT API.
-          </p>
-        </a>
-
-        <a
-          href="https://clerk.com/docs"
-          className="group rounded-lg border border-transparent px-5 py-4 transition-colors hover:border-gray-300 hover:bg-gray-100 hover:dark:border-neutral-700 hover:dark:bg-neutral-800/30"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <h2 className="mb-3 text-2xl font-semibold">
-            Clerk Docs{" "}
-            <span className="inline-block transition-transform group-hover:translate-x-1 motion-reduce:transform-none">
-              -&gt;
-            </span>
-          </h2>
-          <p className="m-0 max-w-[30ch] text-sm opacity-50">
-            Clerk is a User Management Platform, offering a complete suite of
-            embeddable UIs, flexible APIs, and admin dashboards to authenticate
-            and manage your users.
-          </p>
-        </a>
-
-        <a
-          href="https://www.inngest.com/docs"
-          className="group rounded-lg border border-transparent px-5 py-4 transition-colors hover:border-gray-300 hover:bg-gray-100 hover:dark:border-neutral-700 hover:dark:bg-neutral-800/30"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <h2 className="mb-3 text-2xl font-semibold">
-            Inngest Docs{" "}
-            <span className="inline-block transition-transform group-hover:translate-x-1 motion-reduce:transform-none">
-              -&gt;
-            </span>
-          </h2>
-          <p className="m-0 max-w-[30ch] text-balance text-sm opacity-50">
-            Inngest is an event-driven durable execution engine that enables you
-            to run reliable code on any platform, including serverless.
-          </p>
-        </a>
+    <main className="flex min-h-dvh flex-col items-center relative dark:bg-black">
+      <div className="z-10 w-full max-w-5xl flex flex-col flex-1">
+        <div className="w-full py-4 px-4 flex justify-between items-center">
+          <h1 className="font-righteous text-[32px] text-[#8AA100]">MeaLoo</h1>
+          <SignedOut>
+            <SignInButton />
+          </SignedOut>
+          <SignedIn>
+            <div>
+              <UserButton />
+            </div>
+          </SignedIn>
+        </div>
+        <div className="w-full h-full flex justify-center items-center flex-col gap-6 pb-24">
+          <div className="flex justify-center items-center flex-col gap-6">
+            <SignedIn>
+              <Form create={create} latestMessage={message} />
+            </SignedIn>
+            <SignedOut>
+              <h1>Sign in to create new messages</h1>
+            </SignedOut>
+          </div>
+        </div>
       </div>
     </main>
   );

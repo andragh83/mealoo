@@ -6,6 +6,7 @@ import { useAuth } from "@clerk/nextjs";
 export default function Form(props: { create: any; latestMessage: any }) {
   const [message, setMessage] = useState("");
   const [sending, setSending] = useState<boolean>(false);
+  const [aiReply, setAiReply] = useState<any>(undefined);
 
   const { userId, isLoaded } = useAuth();
 
@@ -15,12 +16,8 @@ export default function Form(props: { create: any; latestMessage: any }) {
 
   const onSubmit = async (e: any) => {
     setSending(true);
-    await props.create(message, userId);
-  };
-
-  const handleRefresh = async (e: any) => {
-    console.log("hey");
-    window.location.reload();
+    let response = await props.create(message, userId);
+    setAiReply(response);
   };
 
   return (
@@ -51,22 +48,8 @@ export default function Form(props: { create: any; latestMessage: any }) {
         </div>
       </form>
       <div className="inline-flex items-center justify-center">
-        <p>
-          {props.latestMessage?.author == "AI"
-            ? "🤖 AI's response:"
-            : "➡️ Your last message:"}
-          {` "${props.latestMessage?.text}"` ?? "No message found"}
-        </p>
+        <p>{`${aiReply}`}</p>
       </div>
-      {props.latestMessage?.author != "AI" && (
-        <button
-          onClick={handleRefresh}
-          type="button"
-          className="mt-2 button group inline-flex items-center justify-center gap-0.5 rounded-full font-medium tracking-tight transition-all text-sm px-10 py-2.5 text-white bg-sky-700 hover:bg-sky-600"
-        >
-          See AI response
-        </button>
-      )}
     </>
   );
 }

@@ -15,8 +15,8 @@ const config: Config = {
       },
       fontFamily: {
         righteous: "var(--righteous-font)",
-        roboto: "var(--roboto-font)",
-        roboto_light: "var(--roboto-light-font)",
+        raleway: "var(--raleway-font)",
+        raleway_light: "var(--raleway-light-font)",
       },
     },
   },

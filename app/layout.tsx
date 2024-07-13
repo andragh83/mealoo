@@ -1,19 +1,19 @@
 import type { Metadata } from "next";
-import { Righteous, Roboto } from "next/font/google";
+import { Righteous, Raleway } from "next/font/google";
 import { ClerkProvider } from "@clerk/nextjs";
 
 import "./globals.css";
 
-const roboto = Roboto({
+const raleway = Raleway({
   subsets: ["latin"],
   weight: "400",
-  variable: "--roboto-font",
+  variable: "--raleway-font",
 });
 
-const robotoLight = Roboto({
+const ralewayLight = Raleway({
   subsets: ["latin"],
   weight: "300",
-  variable: "--roboto-light-font",
+  variable: "--raleway-light-font",
 });
 
 const righteous = Righteous({
@@ -36,7 +36,7 @@ export default function RootLayout({
     <ClerkProvider>
       <html lang="en">
         <body
-          className={`${roboto.variable} ${robotoLight.variable} ${righteous.variable}`}
+          className={`${raleway.variable} ${ralewayLight.variable} ${righteous.variable}`}
         >
           {children}
         </body>

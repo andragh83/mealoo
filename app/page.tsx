@@ -27,18 +27,20 @@ export default async function Home() {
             </SignedIn>
           </div>
           <div className="w-full h-full flex justify-center items-center flex-col gap-6 pb-24">
-            <div className="flex justify-center items-center flex-col gap-6">
+            <div className="flex justify-center items-center flex-col gap-8">
               <SignedIn>
                 <div>
-                  <h2 className="font-righteous text-[76px]">MeaLoo</h2>
-                  <p className="font-roboto text-center text-[22px]">
+                  <h2 className="font-righteous text-[76px] leading-[90px]">
+                    MeaLoo
+                  </h2>
+                  <p className="font-raleway text-center text-[22px]">
                     Stress free meal planning
                   </p>
                 </div>
                 <div className="bg-black rounded-md px-[16px] py-[12px] w-full flex justify-center shadow-sm">
                   <Link
                     href="/dashboard"
-                    className="text-roboto text-white text-[16px] text-center w-full h-full"
+                    className="text-raleway text-white text-[16px] text-center w-full h-full"
                   >
                     Let's go
                   </Link>

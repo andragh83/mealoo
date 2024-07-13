@@ -1,7 +1,8 @@
-import { SignInButton, SignedIn, SignedOut, UserButton } from "@clerk/nextjs";
+import { SignInButton, SignedIn, SignedOut } from "@clerk/nextjs";
 import Image from "next/image";
 import Link from "next/link";
 import hero_img from "./hero_img.jpg";
+import TopBarDesktop from "@/components/navs/topBar";
 
 export default async function Home() {
   return (
@@ -12,20 +13,8 @@ export default async function Home() {
         alt="meals"
       />
       <div className="fixed top-0 left-0 right-0 flex flex-col items-center h-dvh w-dvw bg-gradient-to-b from-white to-[#ffffff7c] dark:from-black dark:to-[#00000088]">
-        <div className="z-10 w-full max-w-5xl flex flex-col flex-1">
-          <div className="w-full py-4 px-4 flex justify-between items-center">
-            <h1 className="font-righteous text-[32px] text-[#8AA100]">
-              MeaLoo
-            </h1>
-            <SignedOut>
-              <SignInButton />
-            </SignedOut>
-            <SignedIn>
-              <div>
-                <UserButton />
-              </div>
-            </SignedIn>
-          </div>
+        <div className="z-10 w-full max-w-5xl flex flex-col flex-1 px-10">
+          <TopBarDesktop />
           <div className="w-full h-full flex justify-center items-center flex-col gap-6 pb-24">
             <div className="flex justify-center items-center flex-col gap-8">
               <SignedIn>
@@ -39,7 +28,7 @@ export default async function Home() {
                 </div>
                 <div className="bg-black rounded-md px-[16px] py-[12px] w-full flex justify-center shadow-sm">
                   <Link
-                    href="/dashboard"
+                    href="/create"
                     className="text-raleway text-white text-[16px] text-center w-full h-full"
                   >
                     Let's go
@@ -47,7 +36,7 @@ export default async function Home() {
                 </div>
               </SignedIn>
               <SignedOut>
-                <h1>Sign in to create new messages</h1>
+                <SignInButton />
               </SignedOut>
             </div>
           </div>

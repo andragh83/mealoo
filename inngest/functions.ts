@@ -61,7 +61,30 @@ export const askAI = inngest.createFunction(
           ? JSON.parse(completion.choices[0]?.message.content)
           : { error: "Unexpected OpenAI response" };
       } else {
-        return "Add OPENAI_API_KEY environment variable to get AI responses.";
+        // return {
+        //   error: "Add OPENAI_API_KEY environment variable to get AI responses.",
+        // };
+        const dummy_content = `{
+  "breakfast": {
+    "recipe_name": "Mediterranean Scrambled Eggs",
+    "prep_time": 5,
+    "cooking_time": 10,
+    "calories": 250
+  },
+  "lunch": {
+    "recipe_name": "Asian Chicken Salad",
+    "prep_time": 10,
+    "cooking_time": 15,
+    "calories": 300
+  },
+  "dinner": {
+    "recipe_name": "Grilled Lemon Herb Salmon",
+    "prep_time": 5,
+    "cooking_time": 15,
+    "calories": 350
+  }
+}`;
+        return JSON.parse(dummy_content);
       }
     });
 

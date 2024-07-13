@@ -9,7 +9,7 @@ This is a Next.js meal planning project part of the Xata Summer Hackathon featur
 
 ## App overview
 
-![This is a screenshot of a web page representing the homepage of the webapp with the title "MeaLoo" visible in the browser tab.](./homepage.jpg)
+![This is a screenshot of a web page representing the homepage of the webapp with the title "MeaLoo" visible in the browser tab.](./home_page.jpg)
 
 ![This is a screenshot of a web page part of the webapp with the title "MeaLoo" visible in the browser tab where users can ask AI for ideas of daily meal plans that they can use to create weekly mealplans.](./add_meals.jpg)
 

@@ -20,3 +20,16 @@ export type IDaysOfTheWeek =
   | "sunday";
 
 export type IRecipeDetail = "prep_time" | "cooking_time" | "cost" | "calories";
+
+export type IDayPlan = {
+  [key in IDayMeal]: IMeal | undefined;
+};
+
+export type IWeekPlanMeals = {
+  [key in IDaysOfTheWeek]: { [key in IDayMeal]: IMeal | undefined };
+};
+export type IWeekPlan = {
+  id: string;
+  name: string;
+  meals: IWeekPlanMeals;
+};

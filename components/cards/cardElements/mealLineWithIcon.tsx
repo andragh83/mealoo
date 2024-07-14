@@ -30,6 +30,7 @@ export default function MealLineWithIcon({
             height={sm ? 18 : 24}
             alt={variant}
             objectFit="contain"
+            className="dark:invert"
           />
         </div>
         <p

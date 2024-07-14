@@ -13,15 +13,11 @@ export default function MealCard({
   return (
     <div className="flex gap-[16px]">
       <div
-        className={`w-[200px] flex flex-col items-center justify-center gap-[10px] rounded-lg ${
-          variant === "breakfast"
-            ? "bg-breakfast"
-            : variant === "dinner"
-            ? "bg-dinner"
-            : "bg-lunch"
-        }`}
+        className={`w-[200px] flex flex-col items-center justify-center gap-[10px] rounded-lg ${`bg-${variant}`} `}
       >
-        <p className="font-raleway text-[20px] uppercase">{variant}</p>
+        <p className="font-raleway text-[20px] uppercase dark:text-black">
+          {variant}
+        </p>
         <Image src={dayIcons[variant]} width={100} height={100} alt={variant} />
       </div>
       <div className="flex flex-col gap-[16px] pt-2">
@@ -37,6 +33,7 @@ export default function MealCard({
             text="See recipe"
             url={url}
             extraBtnStyle="!bg-primary"
+            extraBtnTextStyle="dark:text-black"
             icon={
               <Image
                 src={recipeIcon}

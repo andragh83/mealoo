@@ -3,6 +3,7 @@ import TopBarDesktop from "@/components/navs/topBar";
 import SideNavDesktop from "@/components/navs/sideNav";
 import MealCard from "@/components/cards/mealCard";
 import MealCardSmall from "@/components/cards/mealCardSmall";
+import MealCardPlaceholder from "@/components/cards/mealCardPlaceholder";
 
 export default async function DashboardPage({
   params,
@@ -13,7 +14,7 @@ export default async function DashboardPage({
 }) {
   return (
     <main className="flex min-h-dvh flex-col items-center relative dark:bg-black">
-      <div className="z-10 w-full max-w-5xl flex flex-col flex-1 px-10">
+      <div className="z-10 w-full max-w-7xl flex flex-col flex-1 px-10">
         <TopBarDesktop subpage={"Add weekly plan"} />
         <div className="w-full flex p-2">
           <SideNavDesktop activeRoute="dashboard" />
@@ -54,6 +55,7 @@ export default async function DashboardPage({
                   }}
                 />
 
+                <MealCardPlaceholder variant="breakfast" />
                 <MealCardSmall
                   meal={{
                     variant: "breakfast",

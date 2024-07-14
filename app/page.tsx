@@ -13,7 +13,7 @@ export default async function Home() {
         alt="meals"
       />
       <div className="fixed top-0 left-0 right-0 flex flex-col items-center h-dvh w-dvw bg-gradient-to-b from-neutral-50 to-[#ffffff7c] dark:from-black dark:to-[#00000088]">
-        <div className="z-10 w-full max-w-5xl flex flex-col flex-1 px-10">
+        <div className="z-10 w-full max-w-7xl flex flex-col flex-1 px-10">
           <TopBarDesktop />
           <div className="w-full h-full flex justify-center items-center flex-col gap-6 pb-24">
             <div className="flex justify-center items-center flex-col gap-8">

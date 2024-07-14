@@ -3,7 +3,10 @@
 import { useState } from "react";
 import { useAuth } from "@clerk/nextjs";
 
-export default function Form(props: { create: any; latestMessage: any }) {
+export default function Form(props: {
+  createMessage: any;
+  latestMessage: any;
+}) {
   const [message, setMessage] = useState("");
   const [sending, setSending] = useState<boolean>(false);
   const [aiReply, setAiReply] = useState<any>(undefined);
@@ -16,7 +19,7 @@ export default function Form(props: { create: any; latestMessage: any }) {
 
   const onSubmit = async (e: any) => {
     setSending(true);
-    let response = await props.create(message, userId);
+    let response = await props.createMessage(message, userId);
     setAiReply(response);
   };
 

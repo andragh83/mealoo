@@ -10,4 +10,13 @@ export type IMeal = {
   url?: string;
 };
 
+export type IDaysOfTheWeek =
+  | "monday"
+  | "tuesday"
+  | "wednesday"
+  | "thursday"
+  | "friday"
+  | "saturday"
+  | "sunday";
+
 export type IRecipeDetail = "prep_time" | "cooking_time" | "cost" | "calories";

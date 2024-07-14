@@ -14,19 +14,35 @@ const images = {
 export default function MealLineWithIcon({
   detail,
   variant,
+  sm,
 }: {
   detail: string;
   variant: IRecipeDetail;
+  sm?: boolean;
 }) {
   return (
     <div className="flex w-full justify-between">
-      <div className="flex gap-4">
-        <Image src={images[variant]} width={24} height={24} alt={variant} />{" "}
-        <p className="font-raleway_light text-base capitalize">
+      <div className={`flex gap-4`}>
+        <div className="min-w-6 flex justify-center">
+          <Image
+            src={images[variant]}
+            width={sm ? 18 : 24}
+            height={sm ? 18 : 24}
+            alt={variant}
+            objectFit="contain"
+          />
+        </div>
+        <p
+          className={`font-raleway_light ${
+            sm ? "text-sm" : "text-base"
+          } capitalize`}
+        >
           {variant.replace("_", "")}
         </p>
       </div>
-      <p className="font-raleway-bold text-sm">{detail}</p>
+      <p className={`font-raleway-bold  ${sm ? "text-sm" : "text-base"}`}>
+        {detail}
+      </p>
     </div>
   );
 }

@@ -22,7 +22,9 @@ export default function LinkButton({
     >
       {icon ?? null}
       <p
-        className={`text-raleway text-base text-center ${extraBtnStyle ?? ""} `}
+        className={`text-raleway text-base text-center ${
+          extraBtnTextStyle ?? ""
+        } `}
       >
         {text}
       </p>

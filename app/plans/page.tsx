@@ -1,6 +1,7 @@
 import { SignedIn, SignedOut } from "@clerk/nextjs";
 import TopBarDesktop from "@/components/navs/topBar";
 import SideNavDesktop from "@/components/navs/sideNav";
+import DayCard from "@/components/cards/dayCard";
 
 export default async function PlansPage({
   params,
@@ -18,7 +19,14 @@ export default async function PlansPage({
           <div className="flex-1 w-full h-full flex justify-center items-center flex-col gap-6 pb-24">
             <div className="flex justify-center items-center flex-col gap-6">
               <SignedIn>
-                <h1>Signed in </h1>
+                <DayCard
+                  dayOfTheWeek="monday"
+                  meals={{
+                    breakfast: "Egg White Omelette with Vegetables",
+                    lunch: "Steak and veggies",
+                    dinner: "Baked dorada",
+                  }}
+                />
               </SignedIn>
               <SignedOut>
                 <h1>Sign in to create new messages</h1>

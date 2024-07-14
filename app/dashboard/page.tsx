@@ -2,6 +2,7 @@ import { SignedIn, SignedOut } from "@clerk/nextjs";
 import TopBarDesktop from "@/components/navs/topBar";
 import SideNavDesktop from "@/components/navs/sideNav";
 import MealCard from "@/components/cards/mealCard";
+import MealCardSmall from "@/components/cards/mealCardSmall";
 
 export default async function DashboardPage({
   params,
@@ -50,6 +51,17 @@ export default async function DashboardPage({
                     calories: 250,
                     cost: 4,
                     url: "some",
+                  }}
+                />
+
+                <MealCardSmall
+                  meal={{
+                    variant: "breakfast",
+                    recipe_name: "Greek Yogurt with Berries and Nuts",
+                    prep_time: 5,
+                    cooking_time: 0,
+                    calories: 250,
+                    cost: 4,
                   }}
                 />
               </SignedIn>

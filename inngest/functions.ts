@@ -36,7 +36,7 @@ export const askAI = inngest.createFunction(
     // You can execute code that interacts with external services
     // All code is retried automatically on failure
     // Read more about Inngest steps: https://www.inngest.com/docs/learn/inngest-steps
-    const reply = await step.run("create-reply", async () => {
+    const reply = await step.run("create-ai-reply", async () => {
       if (OPENAI_API_KEY) {
         const openai = new OpenAI();
         const completion = await openai.chat.completions.create({
@@ -44,15 +44,15 @@ export const askAI = inngest.createFunction(
             {
               role: "system",
               content: `Only answer with a json in the following format:
-  {
-    [key: meal of the day as string]: {
-      "recipe_name": string,
-      "prep_time": number in minutes,
-      "cooking_time": number in minutes,
-      "cost": number in GBP
-      "calories": number as kcal
-    }
-  }. Suggest a meal plan for a day containing breakfast, lunch and dinner, as follows:`,
+                {
+                  [key: meal of the day as string]: {
+                    "recipe_name": string,
+                    "prep_time": number in minutes,
+                    "cooking_time": number in minutes,
+                    "cost": number in GBP
+                    "calories": number as kcal
+                  }
+                }. Suggest a meal plan for a day containing breakfast, lunch and dinner, as follows:`,
             },
             { role: "user", content: message?.text },
           ],
@@ -66,32 +66,38 @@ export const askAI = inngest.createFunction(
         //   error: "Add OPENAI_API_KEY environment variable to get AI responses.",
         // };
         const dummy_content = `{
-  "breakfast": {
-    "recipe_name": "Mediterranean Scrambled Eggs",
-    "prep_time": 5,
-    "cooking_time": 10,
-    "cost":4,
-    "calories": 250
-  },
-  "lunch": {
-    "recipe_name": "Asian Chicken Salad",
-    "prep_time": 10,
-    "cooking_time": 15,
-    "cost": 10
-    "calories": 300
-  },
-  "dinner": {
-    "recipe_name": "Grilled Lemon Herb Salmon",
-    "prep_time": 5,
-    "cooking_time": 15,
-    "cost":7,
-    "calories": 350
-  }
-}`;
-        return JSON.parse(dummy_content);
+          "breakfast": {
+            "recipe_name": "Mediterranean Scrambled Eggs",
+            "prep_time": 5,
+            "cooking_time": 10,
+            "cost": 4,
+            "calories": 250
+          },
+          "lunch": {
+            "recipe_name": "Asian Chicken Salad",
+            "prep_time": 10,
+            "cooking_time": 15,
+            "cost": 10,
+            "calories": 300
+          },
+          "dinner": {
+            "recipe_name": "Grilled Lemon Herb Salmon",
+            "prep_time": 5,
+            "cooking_time": 15,
+            "cost": 7,
+            "calories": 350
+          }
+        }`;
+        return dummy_content;
       }
     });
 
-    return { event, body: reply };
+    await step.run("add-reply-to-message", async () => {
+      return await prisma.aiReplyMessages.create({
+        data: { messageId: message.xata_id, text: reply, author: "AI" },
+      });
+    });
+
+    return { event, body: "Ai message OK" };
   }
 );

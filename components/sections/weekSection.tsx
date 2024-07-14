@@ -1,7 +1,7 @@
 "use client";
 import { IDaysOfTheWeek, IWeekPlan } from "../cards/types";
 import DaySection from "./daySection";
-import { usePathname, useSearchParams } from "next/navigation";
+import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import Link from "next/link";
 import PlanNameForm from "../forms/nameForm";
 
@@ -69,7 +69,25 @@ export default function WeekSection({
   // };
 
   const pathname = usePathname();
-  const searchParams = useSearchParams();
+  const router = useRouter();
+
+  const onDayClick = (dayid: string) => {
+    const searchParams = new URLSearchParams(window.location.search);
+    if (searchParams.get("weekday")) {
+      searchParams.delete("weekday");
+      searchParams.append("weekday", dayid);
+    } else {
+      searchParams.append("weekday", dayid);
+    }
+
+    console.log("searchparams", `${searchParams}`);
+
+    router.replace(
+      `${pathname}${
+        searchParams.size > 0 ? `?${searchParams}` : `?weekday=${dayid}`
+      }`
+    );
+  };
 
   return (
     <>
@@ -85,14 +103,11 @@ export default function WeekSection({
         </label>
         <div className="mt-4 w-full flex flex-col">
           <div className="flex items-center">
-            {weekdays.map((day) => {
+            {weekdays.map((day, i) => {
               return (
-                <Link
-                  href={`${pathname}${
-                    searchParams
-                      ? `${searchParams}&weekday=${day.id}`
-                      : `?weekday=${day.id}`
-                  }`}
+                <button
+                  key={`weekday_${i}`}
+                  onClick={() => onDayClick(day.id)}
                   className={`w-full px-2 py-1 rounded-t-md shadow-md ${
                     activeWeekDay === day.id
                       ? "bg-primary dark:bg-primary"
@@ -100,7 +115,7 @@ export default function WeekSection({
                   }`}
                 >
                   {day.txt}
-                </Link>
+                </button>
               );
             })}
           </div>

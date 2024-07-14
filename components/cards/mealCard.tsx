@@ -13,7 +13,13 @@ export default function MealCard({
   return (
     <div className="flex gap-[16px]">
       <div
-        className={`w-[200px] flex flex-col items-center justify-center gap-[10px] rounded-lg ${`bg-${variant}`} `}
+        className={`w-[200px] flex flex-col items-center justify-center gap-[10px] rounded-lg ${
+          variant === "lunch"
+            ? `bg-lunch`
+            : variant === "breakfast"
+            ? `bg-breakfast`
+            : `bg-dinner`
+        }`}
       >
         <p className="font-raleway text-[20px] uppercase dark:text-black">
           {variant}

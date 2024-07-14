@@ -1,11 +1,25 @@
 import { Inngest, InngestMiddleware } from "inngest";
 import { PrismaClient } from "@prisma/client";
 
+// Declare global variable prismaGlobal
+declare global {
+  var prismaGlobal: PrismaClient | undefined;
+}
+
 // make Prisma available in the Inngest functions
 const prismaMiddleware = new InngestMiddleware({
   name: "Prisma Middleware",
   init() {
-    const prisma = new PrismaClient();
+    // Create a singleton function for Prisma Client
+    const prismaClientSingleton = () => {
+      if (!globalThis.prismaGlobal) {
+        globalThis.prismaGlobal = new PrismaClient();
+      }
+      return globalThis.prismaGlobal;
+    };
+
+    // Export the Prisma Client instance
+    const prisma = prismaClientSingleton();
 
     return {
       onFunctionRun(ctx) {

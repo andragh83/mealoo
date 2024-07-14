@@ -16,10 +16,10 @@ export default function DayCard({
           {dayOfTheWeek}
         </p>
       </div>
-      <div className="flex flex-col gap-[12px] p-4 rounded-b-lg bg-white dark:bg-zinc-800 shadow-md">
-        {Object.entries(meals).map(([key, meal]) => {
+      <div className="flex flex-col gap-[12px] p-4 rounded-lg bg-white dark:bg-zinc-800 shadow-md">
+        {Object.entries(meals).map(([key, meal], i) => {
           return (
-            <div className="flex items-center gap-[12px]">
+            <div className="flex items-center gap-[12px]" key={`meal_${i}`}>
               <div
                 className={`flex items-center justify-center w-10 h-10 min-w-10 p-1 rounded-md ${`bg-${key}`}`}
               >

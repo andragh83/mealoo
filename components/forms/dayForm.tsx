@@ -4,6 +4,7 @@ import { useState } from "react";
 import { useAuth } from "@clerk/nextjs";
 import { IDayMeal, IDayPlan, IDaysOfTheWeek } from "../cards/types";
 import MealCardPlaceholder from "../cards/mealCardPlaceholder";
+import React from "react";
 
 const weekdays: { id: IDaysOfTheWeek; txt: string }[] = [
   { id: "monday", txt: "MO" },
@@ -49,8 +50,12 @@ export default function DayForm({
         onSubmit={onSubmit}
         className="w-full bg-white dark:bg-zinc-800 p-6 flex flex-col gap-6"
       >
-        {Object.entries(plan).map(([key, _]) => {
-          return <MealCardPlaceholder variant={key as IDayMeal} />;
+        {Object.entries(plan).map(([key, _], i) => {
+          return (
+            <React.Fragment key={`day${i}`}>
+              <MealCardPlaceholder variant={key as IDayMeal} />
+            </React.Fragment>
+          );
         })}
         <button
           type="submit"

@@ -11,13 +11,21 @@ export default function MealCardSmall({
 }) {
   return (
     <div className="flex flex-col gap-2 shadow-md">
-      <div className={`px-6 py-2 rounded-t-lg ${`bg-${variant}`}`}>
+      <div
+        className={`px-6 py-2 rounded-t-lg ${
+          variant === "lunch"
+            ? `bg-lunch`
+            : variant === "breakfast"
+            ? `bg-breakfast`
+            : `bg-dinner`
+        }`}
+      >
         <p className="font-raleway text-[20px] capitalize dark:text-black">
           {variant}
         </p>
       </div>
-      <div className="flex flex-col gap-[16px] pt-0 rounded-b-lg p-6 dark:bg-zinc-800">
-        <div className="py-2 border-b-[1px] border-b-gray-300">
+      <div className="flex flex-col gap-[16px] pt-0 rounded-lg p-6 dark:bg-zinc-800 h-full">
+        <div className="py-2 border-b-[1px] border-b-gray-300 flex items-end">
           <span className="font-raleway text-[18px]">{recipe_name}</span>
         </div>
         <div className="flex flex-col gap-[8px]">

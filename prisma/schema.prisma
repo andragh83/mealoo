@@ -20,10 +20,25 @@ datasource db {
 model Messages {
   text   String
   author String
+  aiReplyMessage AiReplyMessages[]
+
 
   // xata fields
   xata_updatedat DateTime @default(now()) @db.Timestamptz(6)
   xata_id        String   @unique(map: "_pgroll_users_xata_id_key") @default(dbgenerated("('rec_'::text || (xata_private.xid())::text)"))
+  xata_version   Int      @default(0)
+  xata_createdat DateTime @default(now()) @db.Timestamptz(6)
+}
+
+model AiReplyMessages {
+  text   String
+  author String
+  message Messages @relation(fields: [messageId], references: [xata_id])
+  messageId  String @unique
+
+  // xata fields
+  xata_updatedat DateTime @default(now()) @db.Timestamptz(6)
+  xata_id        String   @unique(map: "_pgroll_ai_xata_id_key") @default(dbgenerated("('rec_'::text || (xata_private.xid())::text)"))
   xata_version   Int      @default(0)
   xata_createdat DateTime @default(now()) @db.Timestamptz(6)
 }

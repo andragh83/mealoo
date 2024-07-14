@@ -35,7 +35,7 @@ export default async function CreatePage({
 }) {
   console.log("params", params);
   return (
-    <main className="flex min-h-dvh flex-col items-center relative dark:bg-black">
+    <main className="flex min-h-dvh flex-col items-center relative bg-neutral-50 dark:bg-black">
       <div className="z-10 w-full max-w-5xl flex flex-col flex-1 px-10">
         <TopBarDesktop subpage={"Add weekly plan"} />
         <div className="w-full flex p-2">

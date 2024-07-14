@@ -1,6 +1,7 @@
 import { SignedIn, SignedOut } from "@clerk/nextjs";
 import TopBarDesktop from "@/components/navs/topBar";
 import SideNavDesktop from "@/components/navs/sideNav";
+import MealCard from "@/components/cards/mealCard";
 
 export default async function DashboardPage({
   params,
@@ -18,7 +19,39 @@ export default async function DashboardPage({
           <div className="flex-1 w-full h-full flex justify-center items-center flex-col gap-6 pb-24">
             <div className="flex justify-center items-center flex-col gap-6">
               <SignedIn>
-                <h1>Signed in </h1>
+                <MealCard
+                  meal={{
+                    variant: "breakfast",
+                    recipe_name: "Greek Yogurt with Berries and Nuts",
+                    prep_time: 5,
+                    cooking_time: 0,
+                    calories: 250,
+                    cost: 4,
+                    url: "some",
+                  }}
+                />
+                <MealCard
+                  meal={{
+                    variant: "lunch",
+                    recipe_name: "Greek Yogurt with Berries and Nuts",
+                    prep_time: 5,
+                    cooking_time: 0,
+                    calories: 250,
+                    cost: 4,
+                    url: "some",
+                  }}
+                />
+                <MealCard
+                  meal={{
+                    variant: "dinner",
+                    recipe_name: "Greek Yogurt with Berries and Nuts",
+                    prep_time: 5,
+                    cooking_time: 0,
+                    calories: 250,
+                    cost: 4,
+                    url: "some",
+                  }}
+                />
               </SignedIn>
               <SignedOut>
                 <h1>Sign in to create new messages</h1>

@@ -4,7 +4,7 @@ import ChevronRight from "../icons/svgs/chevronRight";
 
 export default function TopBarDesktop({ subpage }: { subpage?: string }) {
   return (
-    <div className="w-full py-4 px-4 flex justify-between items-center">
+    <div className="w-full py-4 px-2 flex justify-between items-center">
       <div className="flex items-baseline gap-6">
         <Link href={"/"}>
           <h1 className="font-righteous text-[32px] text-[#8AA100]">MeaLoo</h1>

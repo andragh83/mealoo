@@ -15,6 +15,11 @@ const ralewayLight = Raleway({
   weight: "300",
   variable: "--raleway-light-font",
 });
+const ralewaySemiBold = Raleway({
+  subsets: ["latin"],
+  weight: "600",
+  variable: "--raleway-semibold-font",
+});
 
 const righteous = Righteous({
   subsets: ["latin"],
@@ -36,7 +41,7 @@ export default function RootLayout({
     <ClerkProvider>
       <html lang="en">
         <body
-          className={`${raleway.variable} ${ralewayLight.variable} ${righteous.variable}`}
+          className={`${raleway.variable} ${ralewayLight.variable} ${ralewaySemiBold.variable} ${righteous.variable}`}
         >
           {children}
         </body>

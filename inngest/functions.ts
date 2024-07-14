@@ -49,6 +49,7 @@ export const askAI = inngest.createFunction(
       "recipe_name": string,
       "prep_time": number in minutes,
       "cooking_time": number in minutes,
+      "cost": number in GBP
       "calories": number as kcal
     }
   }. Suggest a meal plan for a day containing breakfast, lunch and dinner, as follows:`,
@@ -69,18 +70,21 @@ export const askAI = inngest.createFunction(
     "recipe_name": "Mediterranean Scrambled Eggs",
     "prep_time": 5,
     "cooking_time": 10,
+    "cost":4,
     "calories": 250
   },
   "lunch": {
     "recipe_name": "Asian Chicken Salad",
     "prep_time": 10,
     "cooking_time": 15,
+    "cost": 10
     "calories": 300
   },
   "dinner": {
     "recipe_name": "Grilled Lemon Herb Salmon",
     "prep_time": 5,
     "cooking_time": 15,
+    "cost":7,
     "calories": 350
   }
 }`;

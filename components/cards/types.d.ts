@@ -6,7 +6,7 @@ export type IMeal = {
   prep_time: number;
   cooking_time: number;
   cost: number;
-  calories: number;
+  kcal: number;
   url?: string;
 };
 
@@ -19,7 +19,7 @@ export type IDaysOfTheWeek =
   | "saturday"
   | "sunday";
 
-export type IRecipeDetail = "prep_time" | "cooking_time" | "cost" | "calories";
+export type IRecipeDetail = "prep_time" | "cooking_time" | "cost" | "kcal";
 
 export type IDayPlan = {
   [key in IDayMeal]: IMeal | undefined;
@@ -30,6 +30,6 @@ export type IWeekPlanMeals = {
 };
 export type IWeekPlan = {
   id: string;
-  name: string;
+  name?: string;
   meals: IWeekPlanMeals;
 };

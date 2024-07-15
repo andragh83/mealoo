@@ -20,9 +20,8 @@ export default function PlanNameForm({
   updateMealPlanName,
 }: {
   currentMealPlan: IWeekPlan | undefined;
-  updateMealPlanName?: any;
+  updateMealPlanName: (v: string) => void;
 }) {
-  const [sending, setSending] = useState<boolean>(false);
   const [name, setName] = useState(currentMealPlan ? currentMealPlan.name : "");
 
   const { userId, isLoaded } = useAuth();
@@ -32,29 +31,25 @@ export default function PlanNameForm({
   }
 
   const onSubmit = async (e: any) => {
-    setSending(true);
-    let response = await updateMealPlanName({}, userId);
+    name && updateMealPlanName(name);
   };
 
   return (
     <>
-      <form onSubmit={onSubmit} className="flex items-center gap-2">
+      <div className="flex items-center gap-2">
         <TextInput
           name="plan_name"
-          value={name}
+          value={name ?? ""}
           onChange={setName}
           placeholder="Name your weekly meal plan"
         />
         <button
-          type="submit"
-          disabled={sending}
-          className={`button group inline-flex whitespace-nowrap items-center justify-center gap-0.5 rounded-md font-medium tracking-tight transition-all text-sm px-6 py-2.5 text-black bg-primary hover:bg-primary ${
-            sending ? "opacity-50" : ""
-          }`}
+          onClick={onSubmit}
+          className={`button group inline-flex whitespace-nowrap items-center justify-center gap-0.5 rounded-md font-medium tracking-tight transition-all text-sm px-6 py-2.5 text-black bg-primary hover:bg-primary`}
         >
-          {sending ? "Saving..." : "Save"}
+          {"Save"}
         </button>
-      </form>
+      </div>
     </>
   );
 }

@@ -1,7 +1,7 @@
 import prep_time from "../../icons/pngs/clock.png";
 import cooking_time from "../../icons/pngs/cookTime.png";
 import cost from "../../icons/pngs/cost.png";
-import calories from "../../icons/pngs/kcal.png";
+import kcal from "../../icons/pngs/kcal.png";
 import { IRecipeDetail } from "../types";
 import Image from "next/image";
 
@@ -9,7 +9,7 @@ const images = {
   prep_time,
   cooking_time,
   cost,
-  calories,
+  kcal,
 };
 export default function MealLineWithIcon({
   detail,

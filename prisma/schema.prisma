@@ -1,14 +1,5 @@
-// This is your Prisma schema file,
-// learn more about it in the docs: https://pris.ly/d/prisma-schema
-
-// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
-// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
-
 generator client {
   provider = "prisma-client-js"
-
-  // Enable if using driver adapters
-  // previewFeatures = ["driverAdapters"]
 }
 
 datasource db {
@@ -18,84 +9,68 @@ datasource db {
 }
 
 model Messages {
-  text   String
-  author String
-  aiReplyMessage AiReplyMessages[]
-
-
-  // xata fields
-  xata_updatedat DateTime @default(now()) @db.Timestamptz(6)
-  xata_id        String   @unique(map: "_pgroll_users_xata_id_key") @default(dbgenerated("('rec_'::text || (xata_private.xid())::text)"))
-  xata_version   Int      @default(0)
-  xata_createdat DateTime @default(now()) @db.Timestamptz(6)
+  text           String
+  author         String
+  xata_updatedat DateTime         @default(now()) @db.Timestamptz(6)
+  xata_id        String           @unique(map: "_pgroll_users_xata_id_key") @default(dbgenerated("('rec_'::text || (xata_private.xid())::text)"))
+  xata_version   Int              @default(0)
+  xata_createdat DateTime         @default(now()) @db.Timestamptz(6)
+  aiReplyMessage AiReplyMessages?
 }
 
 model AiReplyMessages {
-  text   String
-  author String
-  message Messages @relation(fields: [messageId], references: [xata_id])
-  messageId  String @unique
-
-  // xata fields
+  text           String
+  author         String
+  messageId      String   @unique
   xata_updatedat DateTime @default(now()) @db.Timestamptz(6)
   xata_id        String   @unique(map: "_pgroll_ai_xata_id_key") @default(dbgenerated("('rec_'::text || (xata_private.xid())::text)"))
   xata_version   Int      @default(0)
   xata_createdat DateTime @default(now()) @db.Timestamptz(6)
+  message        Messages @relation(fields: [messageId], references: [xata_id])
 }
-
 
 model MealPlan {
-  name   String
-  user   String
-  days   DaysOfTheWeek[]
-
-  // xata fields
-  xata_updatedat DateTime @default(now()) @db.Timestamptz(6)
-  xata_id        String   @unique(map: "_pgroll_meal_plan_xata_id_key") @default(dbgenerated("('rec_'::text || (xata_private.xid())::text)"))
-  xata_version   Int      @default(0)
-  xata_createdat DateTime @default(now()) @db.Timestamptz(6)
+  name           String?
+  xata_updatedat DateTime        @default(now()) @db.Timestamptz(6)
+  xata_id        String          @unique(map: "_pgroll_meal_plan_xata_id_key") @default(dbgenerated("('rec_'::text || (xata_private.xid())::text)"))
+  xata_version   Int             @default(0)
+  xata_createdat DateTime        @default(now()) @db.Timestamptz(6)
+  user           String?
+  days           DaysOfTheWeek[]
 }
 
-
 model DaysOfTheWeek {
-  
-  name       String   // Monday, Tuesday, etc.
-  mealPlanId String
-  mealPlan   MealPlan @relation(fields: [mealPlanId], references: [xata_id])
-  meals      DayMeals[]
-
-  // xata fields
-  xata_updatedat DateTime @default(now()) @db.Timestamptz(6)
-  xata_id        String   @unique(map: "_pgroll_days_of_the_week_xata_id_key") @default(dbgenerated("('rec_'::text || (xata_private.xid())::text)"))
-  xata_version   Int      @default(0)
-  xata_createdat DateTime @default(now()) @db.Timestamptz(6)
+  name           String
+  mealPlanId     String
+  xata_updatedat DateTime   @default(now()) @db.Timestamptz(6)
+  xata_id        String     @unique(map: "_pgroll_days_of_the_week_xata_id_key") @default(dbgenerated("('rec_'::text || (xata_private.xid())::text)"))
+  xata_version   Int        @default(0)
+  xata_createdat DateTime   @default(now()) @db.Timestamptz(6)
+  meals          DayMeals[]
+  mealPlan       MealPlan   @relation(fields: [mealPlanId], references: [xata_id])
 }
 
 model DayMeals {
-  type   String // breakfast, lunch, dinner
-  dayId  String
-  day    DaysOfTheWeek    @relation(fields: [dayId], references: [xata_id])
-  mealId String
-  meal   Meals   @relation(fields: [mealId], references: [xata_id])
-
-  // xata fields
-  xata_updatedat DateTime @default(now()) @db.Timestamptz(6)
-  xata_id        String   @unique(map: "_pgroll_day_meal_xata_id_key") @default(dbgenerated("('rec_'::text || (xata_private.xid())::text)"))
-  xata_version   Int      @default(0)
-  xata_createdat DateTime @default(now()) @db.Timestamptz(6)
+  type           String
+  dayId          String
+  mealId         String
+  xata_updatedat DateTime      @default(now()) @db.Timestamptz(6)
+  xata_id        String        @unique(map: "_pgroll_day_meal_xata_id_key") @default(dbgenerated("('rec_'::text || (xata_private.xid())::text)"))
+  xata_version   Int           @default(0)
+  xata_createdat DateTime      @default(now()) @db.Timestamptz(6)
+  day            DaysOfTheWeek @relation(fields: [dayId], references: [xata_id])
+  meal           Meals         @relation(fields: [mealId], references: [xata_id])
 }
 
 model Meals {
-  
-  name         String
-  cooking_time Int      // in minutes
-  prep_time    Int      // in minutes
-  kcal         Int      // in kcal
-  dayMealss     DayMeals[]
-
-  // xata fields
-  xata_updatedat DateTime @default(now()) @db.Timestamptz(6)
-  xata_id        String   @unique(map: "_pgroll_meal_xata_id_key") @default(dbgenerated("('rec_'::text || (xata_private.xid())::text)"))
-  xata_version   Int      @default(0)
-  xata_createdat DateTime @default(now()) @db.Timestamptz(6)
+  recipe_name    String
+  cooking_time   Int
+  prep_time      Int
+  kcal           Int
+  xata_updatedat DateTime   @default(now()) @db.Timestamptz(6)
+  xata_id        String     @unique(map: "_pgroll_meal_xata_id_key") @default(dbgenerated("('rec_'::text || (xata_private.xid())::text)"))
+  xata_version   Int        @default(0)
+  xata_createdat DateTime   @default(now()) @db.Timestamptz(6)
+  cost           Int
+  dayMealss      DayMeals[]
 }

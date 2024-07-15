@@ -27,7 +27,7 @@ export default async function DashboardPage({
                     recipe_name: "Greek Yogurt with Berries and Nuts",
                     prep_time: 5,
                     cooking_time: 0,
-                    calories: 250,
+                    kcal: 250,
                     cost: 4,
                     url: "some",
                   }}
@@ -38,7 +38,7 @@ export default async function DashboardPage({
                     recipe_name: "Greek Yogurt with Berries and Nuts",
                     prep_time: 5,
                     cooking_time: 0,
-                    calories: 250,
+                    kcal: 250,
                     cost: 4,
                     url: "some",
                   }}
@@ -49,7 +49,7 @@ export default async function DashboardPage({
                     recipe_name: "Greek Yogurt with Berries and Nuts",
                     prep_time: 5,
                     cooking_time: 0,
-                    calories: 250,
+                    kcal: 250,
                     cost: 4,
                     url: "some",
                   }}
@@ -62,7 +62,7 @@ export default async function DashboardPage({
                     recipe_name: "Greek Yogurt with Berries and Nuts",
                     prep_time: 5,
                     cooking_time: 0,
-                    calories: 250,
+                    kcal: 250,
                     cost: 4,
                   }}
                 />

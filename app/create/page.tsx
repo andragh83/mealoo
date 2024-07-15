@@ -1,73 +1,17 @@
 import { SignedIn, SignedOut } from "@clerk/nextjs";
 import GenerateIdesForm from "../../components/forms/generateIdeasForm";
 import { prisma } from "@/prisma/client";
-import { inngest } from "@/inngest";
 import TopBarDesktop from "@/components/navs/topBar";
 import SideNavDesktop from "@/components/navs/sideNav";
 import WeekSection from "@/components/sections/weekSection";
 import { IDaysOfTheWeek } from "@/components/cards/types";
-
-export async function createMessage(message: string, userId: string) {
-  "use server";
-  if (!userId) {
-    throw new Error("You must be signed in to create messages!");
-  }
-  const createdMessage = await prisma.messages.create({
-    data: { text: message, author: userId },
-  });
-
-  await inngest.send({
-    name: "app/ask.ai",
-    data: {
-      messageId: createdMessage.xata_id,
-    },
-  });
-
-  return createdMessage.xata_id;
-}
-
-async function getAiReplyMessage(message_id: string) {
-  const lastAiReplyMessage = await prisma.aiReplyMessages.findFirst({
-    where: {
-      messageId: message_id,
-    },
-    orderBy: {
-      xata_createdat: "desc",
-    },
-  });
-
-  return lastAiReplyMessage;
-}
-
-export async function createWeekMealPlan(plan: {}, userId: string) {
-  "use server";
-  // if (!userId) {
-  //   throw new Error("You must be signed in to create messages!");
-  // }
-  // const createdMessage = await prisma.messages.create({
-  //   data: { text: message, author: userId },
-  // });
-}
-
-export async function createDayMealPlan(plan: {}, userId: string) {
-  "use server";
-  // if (!userId) {
-  //   throw new Error("You must be signed in to create messages!");
-  // }
-  // const createdMessage = await prisma.messages.create({
-  //   data: { text: message, author: userId },
-  // });
-}
-
-export async function updateMealPlanName(plan: {}, userId: string) {
-  "use server";
-  // if (!userId) {
-  //   throw new Error("You must be signed in to create messages!");
-  // }
-  // const createdMessage = await prisma.messages.create({
-  //   data: { text: message, author: userId },
-  // });
-}
+import {
+  updateMealPlan,
+  createMessage,
+  createWeekMealPlan,
+  getAiReplyMessage,
+  getMealPlan,
+} from "../actions";
 
 export default async function CreatePage({
   params,
@@ -88,6 +32,12 @@ export default async function CreatePage({
       ? searchParams.message_id
       : searchParams.message_id[0]);
 
+  const plan_id =
+    searchParams.plan_id &&
+    (typeof searchParams.plan_id === "string"
+      ? searchParams.plan_id
+      : searchParams.plan_id[0]);
+
   const currentMessage = message_id
     ? await prisma.aiReplyMessages.findFirst({
         where: {
@@ -100,6 +50,7 @@ export default async function CreatePage({
     : undefined;
 
   const aiReply = message_id ? await getAiReplyMessage(message_id) : undefined;
+  const currentMealPlan = plan_id ? await getMealPlan(plan_id) : undefined;
 
   return (
     <main className="flex min-h-dvh flex-col items-center relative bg-neutral-50 dark:bg-black">
@@ -112,17 +63,19 @@ export default async function CreatePage({
               <SignedIn>
                 <div className="flex gap-10">
                   <WeekSection
-                    currentWeekMealPlan={undefined}
+                    currentWeekMealPlan={currentMealPlan}
                     activeWeekDay={active_weekday as IDaysOfTheWeek}
-                    updateMealPlanName={updateMealPlanName}
+                    updateMealPlan={updateMealPlan}
+                    createWeekMealPlan={createWeekMealPlan}
                   />
                   <GenerateIdesForm
-                    aiReply={aiReply?.text}
+                    aiReply={{ data: aiReply?.text }}
                     activeWeekDay={active_weekday as IDaysOfTheWeek}
                     currentMessage={currentMessage}
                     createMessage={createMessage}
                     createWeekMealPlan={createWeekMealPlan}
-                    createDayMealPlan={createDayMealPlan}
+                    currentWeekMealPlan={currentMealPlan}
+                    updateMealPlan={updateMealPlan}
                   />
                 </div>
               </SignedIn>

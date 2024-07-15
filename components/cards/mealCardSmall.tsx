@@ -5,7 +5,7 @@ import { IMeal } from "./types";
 import MealLineWithIcon from "./cardElements/mealLineWithIcon";
 
 export default function MealCardSmall({
-  meal: { variant, recipe_name, prep_time, cooking_time, cost, calories, url },
+  meal: { variant, recipe_name, prep_time, cooking_time, cost, kcal, url },
 }: {
   meal: IMeal;
 }) {
@@ -32,7 +32,7 @@ export default function MealCardSmall({
           <MealLineWithIcon variant="prep_time" detail={`${prep_time}`} sm />
           <MealLineWithIcon variant="cooking_time" detail={`${cooking_time}`} />
           <MealLineWithIcon variant="cost" detail={`${cost}`} />
-          <MealLineWithIcon variant="calories" detail={`${calories}`} />
+          <MealLineWithIcon variant="kcal" detail={`${kcal}`} />
         </div>
         {url ? (
           <LinkButton

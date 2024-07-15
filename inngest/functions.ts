@@ -50,7 +50,7 @@ export const askAI = inngest.createFunction(
                     "prep_time": number in minutes,
                     "cooking_time": number in minutes,
                     "cost": number in GBP
-                    "calories": number as kcal
+                    "kcal": number as kcal
                   }
                 }. Suggest a meal plan for a day containing breakfast, lunch and dinner, as follows:`,
             },
@@ -58,44 +58,47 @@ export const askAI = inngest.createFunction(
           ],
           model: "gpt-3.5-turbo",
         });
+        console.log("completion", completion);
         return completion.choices[0]?.message.content
-          ? JSON.parse(completion.choices[0]?.message.content)
+          ? completion.choices[0]?.message.content
           : { error: "Unexpected OpenAI response" };
       } else {
-        // return {
-        //   error: "Add OPENAI_API_KEY environment variable to get AI responses.",
-        // };
-        const dummy_content = `{
-          "breakfast": {
-            "recipe_name": "Mediterranean Scrambled Eggs",
-            "prep_time": 5,
-            "cooking_time": 10,
-            "cost": 4,
-            "calories": 250
-          },
-          "lunch": {
-            "recipe_name": "Asian Chicken Salad",
-            "prep_time": 10,
-            "cooking_time": 15,
-            "cost": 10,
-            "calories": 300
-          },
-          "dinner": {
-            "recipe_name": "Grilled Lemon Herb Salmon",
-            "prep_time": 5,
-            "cooking_time": 15,
-            "cost": 7,
-            "calories": 350
-          }
-        }`;
-        return dummy_content;
+        return {
+          error: "Add OPENAI_API_KEY environment variable to get AI responses.",
+        };
+        // const dummy_content = `{
+        //   "breakfast": {
+        //     "recipe_name": "Mediterranean Scrambled Eggs",
+        //     "prep_time": 5,
+        //     "cooking_time": 10,
+        //     "cost": 4,
+        //     "calories": 250
+        //   },
+        //   "lunch": {
+        //     "recipe_name": "Asian Chicken Salad",
+        //     "prep_time": 10,
+        //     "cooking_time": 15,
+        //     "cost": 10,
+        //     "calories": 300
+        //   },
+        //   "dinner": {
+        //     "recipe_name": "Grilled Lemon Herb Salmon",
+        //     "prep_time": 5,
+        //     "cooking_time": 15,
+        //     "cost": 7,
+        //     "calories": 350
+        //   }
+        // }`;
+        // return dummy_content;
       }
     });
 
     await step.run("add-reply-to-message", async () => {
-      return await prisma.aiReplyMessages.create({
-        data: { messageId: message.xata_id, text: reply, author: "AI" },
-      });
+      if (typeof reply === "string") {
+        return await prisma.aiReplyMessages.create({
+          data: { messageId: message.xata_id, text: reply, author: "AI" },
+        });
+      }
     });
 
     return { event, body: "Ai message OK" };

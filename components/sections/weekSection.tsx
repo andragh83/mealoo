@@ -1,9 +1,9 @@
 "use client";
-import { IDaysOfTheWeek, IWeekPlan } from "../cards/types";
+import { IDayPlan, IDaysOfTheWeek, IWeekPlan } from "../cards/types";
 import DaySection from "./daySection";
-import { usePathname, useRouter, useSearchParams } from "next/navigation";
-import Link from "next/link";
+import { usePathname, useRouter } from "next/navigation";
 import PlanNameForm from "../forms/nameForm";
+import { useAuth } from "@clerk/nextjs";
 
 const weekdays: { id: IDaysOfTheWeek; txt: string }[] = [
   { id: "monday", txt: "MO" },
@@ -18,61 +18,46 @@ const weekdays: { id: IDaysOfTheWeek; txt: string }[] = [
 export default function WeekSection({
   currentWeekMealPlan,
   activeWeekDay,
-  updateMealPlanName,
+  updateMealPlan,
+  createWeekMealPlan,
 }: {
   currentWeekMealPlan?: IWeekPlan;
   activeWeekDay: IDaysOfTheWeek;
-  updateMealPlanName: any;
+  createWeekMealPlan: (p: {
+    userid: string;
+    days?: { dayOfTheWeek: IDaysOfTheWeek; dayMeals: IDayPlan };
+    planName?: string;
+  }) => Promise<{
+    name: string | null;
+    xata_updatedat: Date;
+    xata_id: string;
+    xata_version: number;
+    xata_createdat: Date;
+    user: string | null;
+  }>;
+  updateMealPlan: (p: {
+    planid: string;
+    days?: { dayOfTheWeek: IDaysOfTheWeek; dayMeals: IDayPlan };
+    planName?: string;
+  }) => void;
 }) {
-  // const [currentSavedDayPlan, setCurrentSavedDayPlan] = useState<IDayPlan>({
-  //   breakfast: undefined,
-  //   lunch: undefined,
-  //   dinner: undefined,
-  // });
-
-  // const emptyWeekPlan: { [key in IDaysOfTheWeek]: IDayPlan } = {
-  //   monday: {
-  //     breakfast: undefined,
-  //     lunch: undefined,
-  //     dinner: undefined,
-  //   },
-  //   tuesday: {
-  //     breakfast: undefined,
-  //     lunch: undefined,
-  //     dinner: undefined,
-  //   },
-  //   wednesday: {
-  //     breakfast: undefined,
-  //     lunch: undefined,
-  //     dinner: undefined,
-  //   },
-  //   thursday: {
-  //     breakfast: undefined,
-  //     lunch: undefined,
-  //     dinner: undefined,
-  //   },
-  //   friday: {
-  //     breakfast: undefined,
-  //     lunch: undefined,
-  //     dinner: undefined,
-  //   },
-  //   saturday: {
-  //     breakfast: undefined,
-  //     lunch: undefined,
-  //     dinner: undefined,
-  //   },
-  //   sunday: {
-  //     breakfast: undefined,
-  //     lunch: undefined,
-  //     dinner: undefined,
-  //   },
-  // };
-
   const pathname = usePathname();
   const router = useRouter();
 
+  const { userId, isLoaded } = useAuth();
+
   const onDayClick = (dayid: string) => {
     const searchParams = new URLSearchParams(window.location.search);
+
+    if (
+      currentWeekMealPlan &&
+      !currentWeekMealPlan?.meals[activeWeekDay].breakfast?.recipe_name
+    ) {
+      if (searchParams.get("message_id")) {
+        searchParams.delete("message_id");
+      }
+    }
+
     if (searchParams.get("weekday")) {
       searchParams.delete("weekday");
       searchParams.append("weekday", dayid);
@@ -80,13 +65,34 @@ export default function WeekSection({
       searchParams.append("weekday", dayid);
     }
 
-    console.log("searchparams", `${searchParams}`);
-
     router.replace(
       `${pathname}${
         searchParams.size > 0 ? `?${searchParams}` : `?weekday=${dayid}`
       }`
     );
+  };
+
+  const saveName = async (name: string) => {
+    if (currentWeekMealPlan) {
+      updateMealPlan({ planid: currentWeekMealPlan.id, planName: name });
+    } else if (userId) {
+      const newPlan = await createWeekMealPlan({
+        userid: userId,
+        planName: name,
+      });
+      if (newPlan.xata_id) {
+        const searchParams = new URLSearchParams(window.location.search);
+        searchParams.append("plan_id", newPlan.xata_id);
+
+        router.replace(
+          `${pathname}${
+            searchParams.size > 0
+              ? `?${searchParams}`
+              : `?plan_id=${newPlan.xata_id}`
+          }`
+        );
+      }
+    }
   };
 
   return (
@@ -98,7 +104,9 @@ export default function WeekSection({
             currentMealPlan={
               currentWeekMealPlan ? currentWeekMealPlan : undefined
             }
-            updateMealPlanName={updateMealPlanName}
+            updateMealPlanName={(v: string) => {
+              saveName(v);
+            }}
           />
         </label>
         <div className="mt-4 w-full flex flex-col">

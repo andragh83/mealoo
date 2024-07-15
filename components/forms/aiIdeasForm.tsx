@@ -7,10 +7,14 @@ export default function AiIdeasForm({
   meals,
   daySelected,
   regenerate,
+  saveMeals,
+  isSending,
 }: {
   meals: IDayPlan;
   daySelected?: IDaysOfTheWeek;
   regenerate: any;
+  saveMeals: any;
+  isSending: boolean;
 }) {
   return (
     <div className="flex flex-col gap-6">
@@ -35,10 +39,22 @@ export default function AiIdeasForm({
       <button
         disabled={!daySelected}
         className={`button group capitalize inline-flex whitespace-nowrap items-center justify-center gap-0.5 rounded-md font-medium tracking-tight transition-all text-sm px-6 py-2.5 text-black bg-primary hover:bg-primary ${
-          !daySelected ? "opacity-50" : ""
+          !daySelected || isSending ? "opacity-50" : ""
         }`}
+        onClick={() => {
+          saveMeals(
+            Object.entries(meals).map(([key, value], i) => ({
+              ...value,
+              variant: key as IDayMeal,
+            }))
+          );
+        }}
       >
-        {daySelected ? `Save for ${daySelected}` : "Save"}
+        {isSending
+          ? "Saving..."
+          : daySelected
+          ? `Save for ${daySelected}`
+          : "Select a day before saving"}
       </button>
     </div>
   );

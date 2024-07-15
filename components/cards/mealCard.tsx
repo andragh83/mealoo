@@ -6,14 +6,14 @@ import MealLineWithIcon from "./cardElements/mealLineWithIcon";
 import { dayIcons, mealIcons } from "./cardElements/cardIcons";
 
 export default function MealCard({
-  meal: { variant, recipe_name, prep_time, cooking_time, cost, calories, url },
+  meal: { variant, recipe_name, prep_time, cooking_time, cost, kcal, url },
 }: {
   meal: IMeal;
 }) {
   return (
     <div className="flex gap-[16px]">
       <div
-        className={`w-[200px] flex flex-col items-center justify-center gap-[10px] rounded-lg ${
+        className={`w-[200px] min-w-[200px] min-h-[200px] py-4 h-full flex flex-col items-center justify-center gap-[10px] rounded-lg ${
           variant === "lunch"
             ? `bg-lunch`
             : variant === "breakfast"
@@ -26,13 +26,13 @@ export default function MealCard({
         </p>
         <Image src={dayIcons[variant]} width={100} height={100} alt={variant} />
       </div>
-      <div className="flex flex-col gap-[16px] pt-2">
+      <div className="flex flex-col gap-[16px] py-2">
         <span className="font-raleway text-[18px]">{recipe_name}</span>
-        <div className="flex flex-col gap-[8px]">
+        <div className="flex flex-col gap-[4px]">
           <MealLineWithIcon variant="prep_time" detail={`${prep_time}`} />
           <MealLineWithIcon variant="cooking_time" detail={`${cooking_time}`} />
           <MealLineWithIcon variant="cost" detail={`${cost}`} />
-          <MealLineWithIcon variant="calories" detail={`${calories}`} />
+          <MealLineWithIcon variant="kcal" detail={`${kcal}`} />
         </div>
         {url ? (
           <LinkButton

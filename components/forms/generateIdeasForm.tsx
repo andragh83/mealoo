@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { Suspense, useState } from "react";
 import { useAuth } from "@clerk/nextjs";
 import TextAreaInput from "@/components/inputs/textAreaInput";
 import { usePathname, useRouter } from "next/navigation";
@@ -10,7 +10,6 @@ import { IDayPlan, IDaysOfTheWeek, IWeekPlan } from "../cards/types";
 export default function GenerateIdeasForm(props: {
   activeWeekDay?: IDaysOfTheWeek;
   currentMessage?: any;
-  aiReply?: { data?: string; error?: string };
   createMessage: any;
   createWeekMealPlan: (p: {
     userid: string;
@@ -25,6 +24,7 @@ export default function GenerateIdeasForm(props: {
     user: string | null;
   }>;
   updateMealPlan: (p: {
+    userId: string;
     planid: string;
     days?: { dayOfTheWeek: IDaysOfTheWeek; dayMeals: IDayPlan };
     planName?: string;
@@ -33,6 +33,7 @@ export default function GenerateIdeasForm(props: {
 }) {
   const [message, setMessage] = useState("");
   const [sending, setSending] = useState<boolean>(false);
+  const [aiReply, setAiReply] = useState<string | undefined>(undefined);
 
   const { userId, isLoaded } = useAuth();
 
@@ -45,47 +46,27 @@ export default function GenerateIdeasForm(props: {
 
   const onSubmit = async () => {
     setSending(true);
-    let message_id = await props.createMessage(message, userId);
-    if (message_id) {
-      const searchParams = new URLSearchParams(window.location.search);
-      if (searchParams.get("message_id")) {
-        searchParams.delete("message_id");
-        searchParams.append("message_id", message_id);
-      } else {
-        searchParams.append("message_id", message_id);
-      }
-      setTimeout(() => {
-        router.push(
-          `${pathname}${
-            searchParams.size > 0
-              ? `?${searchParams}`
-              : `?message_id=${message_id}`
-          }`
-        );
-        setSending(false);
-      }, 5000);
-    }
+    let aiReplyFromApi = await props.createMessage(message, userId);
+    setAiReply(aiReplyFromApi);
+    setSending(false);
   };
 
   const saveMeals = async (meals: IDayPlan) => {
     const searchParams = new URLSearchParams(window.location.search);
-    if (searchParams.get("message_id")) {
-      searchParams.delete("message_id");
-    }
-    if (props.currentWeekMealPlan && props.activeWeekDay && meals) {
+
+    if (props.currentWeekMealPlan && props.activeWeekDay && meals && userId) {
+      setSending(true);
       props.updateMealPlan({
+        userId: userId,
         planid: props.currentWeekMealPlan.id,
         days: {
           dayOfTheWeek: props.activeWeekDay,
           dayMeals: meals,
         },
       });
-      setSending(true);
-      setTimeout(() => {
-        window.location.reload();
-        setSending(false);
-      }, 5000);
+      setSending(false);
     } else if (userId && props.activeWeekDay) {
+      setSending(true);
       const newPlan = await props.createWeekMealPlan({
         userid: userId,
         days: {
@@ -93,9 +74,9 @@ export default function GenerateIdeasForm(props: {
           dayMeals: meals,
         },
       });
+      setSending(false);
       if (newPlan.xata_id) {
         searchParams.append("plan_id", newPlan.xata_id);
-
         setTimeout(() => {
           router.replace(
             `${pathname}${
@@ -105,7 +86,7 @@ export default function GenerateIdeasForm(props: {
             }`
           );
           setSending(false);
-        }, 5000);
+        }, 200);
       }
     }
   };
@@ -135,24 +116,21 @@ export default function GenerateIdeasForm(props: {
       >
         {sending ? "Generating..." : "Show me ideas"}
       </button>
-
-      {props.aiReply?.error ? (
-        <div>There was an error: {props.aiReply.error}</div>
-      ) : props.aiReply?.data ? (
-        <AiIdeasForm
-          meals={
-            typeof props.aiReply?.data === "string"
-              ? JSON.parse(props.aiReply.data)
-              : undefined
-          }
-          daySelected={props.activeWeekDay}
-          regenerate={onSubmit}
-          saveMeals={(meals: IDayPlan) => {
-            saveMeals(meals);
-          }}
-          isSending={sending}
-        />
-      ) : null}
+      <Suspense fallback={<div className="w-40 h-40 bg-red-500" />}>
+        {aiReply ? (
+          <AiIdeasForm
+            meals={
+              typeof aiReply === "string" ? JSON.parse(aiReply) : undefined
+            }
+            daySelected={props.activeWeekDay}
+            regenerate={onSubmit}
+            saveMeals={(meals: IDayPlan) => {
+              saveMeals(meals);
+            }}
+            isSending={sending}
+          />
+        ) : null}
+      </Suspense>
     </div>
   );
 }

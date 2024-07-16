@@ -29,7 +29,7 @@ export default function AiIdeasForm({
           ) : null;
         })}
         <button
-          className="h-full w-full rounded-lg border border-primary bg-lime-50"
+          className="h-48 lg:h-full w-full rounded-lg border border-primary bg-lime-50"
           onClick={regenerate}
         >
           <span className="text-sm font-raleway text-lime-800">Try again</span>

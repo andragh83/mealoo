@@ -11,22 +11,11 @@ datasource db {
 model Messages {
   text           String
   author         String
-  xata_updatedat DateTime         @default(now()) @db.Timestamptz(6)
-  xata_id        String           @unique(map: "_pgroll_users_xata_id_key") @default(dbgenerated("('rec_'::text || (xata_private.xid())::text)"))
-  xata_version   Int              @default(0)
-  xata_createdat DateTime         @default(now()) @db.Timestamptz(6)
-  aiReplyMessage AiReplyMessages?
-}
-
-model AiReplyMessages {
-  text           String
-  author         String
-  messageId      String   @unique
   xata_updatedat DateTime @default(now()) @db.Timestamptz(6)
-  xata_id        String   @unique(map: "_pgroll_ai_xata_id_key") @default(dbgenerated("('rec_'::text || (xata_private.xid())::text)"))
+  xata_id        String   @unique(map: "_pgroll_users_xata_id_key") @default(dbgenerated("('rec_'::text || (xata_private.xid())::text)"))
   xata_version   Int      @default(0)
   xata_createdat DateTime @default(now()) @db.Timestamptz(6)
-  message        Messages @relation(fields: [messageId], references: [xata_id])
+  ai_reply       String?
 }
 
 model MealPlan {
@@ -36,7 +25,9 @@ model MealPlan {
   xata_version   Int             @default(0)
   xata_createdat DateTime        @default(now()) @db.Timestamptz(6)
   user           String?
+  shopping_list  String?
   days           DaysOfTheWeek[]
+  weeks          WeekMealPlan[]
 }
 
 model DaysOfTheWeek {
@@ -73,4 +64,25 @@ model Meals {
   xata_createdat DateTime   @default(now()) @db.Timestamptz(6)
   cost           Int
   dayMealss      DayMeals[]
+}
+
+model Week {
+  xata_id        String         @unique(map: "_pgroll_week_xata_id_key") @default(dbgenerated("('rec_'::text || (xata_private.xid())::text)"))
+  xata_version   Int            @default(0)
+  xata_createdat DateTime       @default(now()) @db.Timestamptz(6)
+  startDate      DateTime
+  endDate        DateTime
+  mealPlans      WeekMealPlan[]
+}
+
+model WeekMealPlan {
+  xata_id        String   @unique(map: "_pgroll_week_meal_plan_xata_id_key") @default(dbgenerated("('rec_'::text || (xata_private.xid())::text)"))
+  xata_version   Int      @default(0)
+  xata_createdat DateTime @default(now()) @db.Timestamptz(6)
+  weekId         String
+  mealPlanId     String
+  mealPlan       MealPlan @relation(fields: [mealPlanId], references: [xata_id])
+  week           Week     @relation(fields: [weekId], references: [xata_id])
+
+  @@unique([weekId, mealPlanId])
 }

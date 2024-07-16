@@ -1,7 +1,11 @@
 import { SignedIn, SignedOut } from "@clerk/nextjs";
 import TopBarDesktop from "@/components/navs/topBar";
 import SideNavDesktop from "@/components/navs/sideNav";
-import { getAllMealPlans } from "../actions";
+import {
+  assignMealPlanToWeek,
+  deleteMealPlan,
+  getAllMealPlans,
+} from "../actions";
 import { auth } from "@clerk/nextjs/server";
 import PlanExpandableCard from "@/components/cards/planExpandableCard";
 import ChevronRight from "@/components/icons/svgs/chevronRight";
@@ -26,11 +30,17 @@ export default async function PlansPage({
           <SideNavDesktop activeRoute="plans" />
           <BottomNavMobile activeRoute="plans" />
           <div className="flex-1 w-full h-full flex justify-center items-center flex-col gap-6 pb-24">
-            <div className="flex justify-center items-center flex-col gap-6 w-full lg:px-8">
+            <div className="flex justify-center items-center flex-col gap-6 w-full md:px-8">
               <SignedIn>
                 <div className="flex flex-col gap-4 w-full">
                   {plans && plans.length > 0 ? (
-                    plans?.map((plan) => <PlanExpandableCard plan={plan} />)
+                    plans?.map((plan) => (
+                      <PlanExpandableCard
+                        plan={plan}
+                        deletePlan={deleteMealPlan}
+                        assign={assignMealPlanToWeek}
+                      />
+                    ))
                   ) : (
                     <div className="round-lg bg-light_pastel_teal flex flex-col py-2 px-8 shadow-md">
                       <Link

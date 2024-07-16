@@ -38,6 +38,7 @@ export default function WeekSection({
     user: string | null;
   }>;
   updateMealPlan: (p: {
+    userId: string;
     planid: string;
     days?: { dayOfTheWeek: IDaysOfTheWeek; dayMeals: IDayPlan };
     planName?: string;
@@ -46,7 +47,7 @@ export default function WeekSection({
   const pathname = usePathname();
   const router = useRouter();
 
-  const { userId, isLoaded } = useAuth();
+  const { userId } = useAuth();
 
   const onDayClick = (dayid: string) => {
     const searchParams = new URLSearchParams(window.location.search);
@@ -72,8 +73,12 @@ export default function WeekSection({
   };
 
   const saveName = async (name: string) => {
-    if (currentWeekMealPlan) {
-      updateMealPlan({ planid: currentWeekMealPlan.id, planName: name });
+    if (currentWeekMealPlan && userId) {
+      updateMealPlan({
+        userId: userId,
+        planid: currentWeekMealPlan.id,
+        planName: name,
+      });
     } else if (userId) {
       const newPlan = await createWeekMealPlan({
         userid: userId,
@@ -101,8 +106,6 @@ export default function WeekSection({
       setIsNameEditActive(false);
     }
   }, []);
-
-  console.log("cond ", isNameEditActive);
 
   return (
     <>

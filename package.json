@@ -14,6 +14,8 @@
     "@prisma/client": "^5.16.1",
     "@xata.io/cli": "^0.15.15",
     "@xata.io/client": "^0.29.5",
+    "antd": "^5.19.2",
+    "date-fns": "^3.6.0",
     "inngest": "^3.19.18",
     "next": "14.2.4",
     "openai": "^4.52.2",

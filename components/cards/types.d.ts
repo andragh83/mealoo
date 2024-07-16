@@ -31,5 +31,7 @@ export type IWeekPlanMeals = {
 export type IWeekPlan = {
   id: string;
   name?: string;
+  weeks?: { weekStart: Date; weekEnd: Date }[];
+  shopping_list?: string;
   meals: IWeekPlanMeals;
 };

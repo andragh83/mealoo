@@ -5,6 +5,8 @@ import MealCard from "@/components/cards/mealCard";
 import MealCardSmall from "@/components/cards/mealCardSmall";
 import MealCardPlaceholder from "@/components/cards/mealCardPlaceholder";
 import BottomNavMobile from "@/components/navs/bottomNavMobile";
+import { getMealPlanForCurrentWeek } from "../actions";
+import { auth } from "@clerk/nextjs/server";
 
 export default async function DashboardPage({
   params,
@@ -13,6 +15,12 @@ export default async function DashboardPage({
   params: { slug: string };
   searchParams: { [key: string]: string | string[] | undefined };
 }) {
+  const { userId } = auth();
+  const currentPlan = userId
+    ? await getMealPlanForCurrentWeek(userId)
+    : undefined;
+
+  console.log("currentPlan", currentPlan);
   return (
     <main className="flex min-h-dvh flex-col items-center relative dark:bg-black">
       <div className="z-10 w-full max-w-7xl flex flex-col flex-1 px-10">

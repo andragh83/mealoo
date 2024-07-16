@@ -1,102 +1,78 @@
+import { assignMealPlanToWeek } from "@/app/actions";
 import { inngest } from "./client";
 import OpenAI from "openai";
+import { IWeekPlan } from "@/components/cards/types";
 
 const OPENAI_API_KEY = process.env.OPENAI_API_KEY;
 
 // Functions exported from this file are exposed to Inngest
 // See: @/app/api/inngest/route.ts
 
-export const askAI = inngest.createFunction(
-  { id: "ask-ai-for-a-meal-plan-idea", retries: 1 }, // Each function should have a unique ID
-  { event: "app/ask.ai" }, // When an event by this name received, this function will run
+export const generateShoppingList = inngest.createFunction(
+  { id: "ai_generate_shopping_list", retries: 1 }, // Each function should have a unique ID
+  { event: "app/ai.generate.shopping.list" }, // When an event by this name received, this function will run
 
   async ({ event, step, prisma }) => {
-    // Fetch mesage count to see if still eligible
-    const messageCount = await prisma.messages.count({
-      where: {
-        author: event.data.author,
-      },
-    });
-
-    if (messageCount > 50) {
-      return { error: "You have exhausted your 10 messages included" };
-    }
-
-    // Fetch data from the database
-    const message = await prisma.messages.findUnique({
-      where: {
-        xata_id: event.data.messageId,
-      },
-    });
-
-    if (!message) {
-      return { error: "Message could not be found" };
-    }
+    // assign plan to a week
+    await assignMealPlanToWeek(
+      event.data.userId,
+      event.data.plan.id,
+      event.data.weekStart,
+      event.data.weekEnd
+    );
 
     // You can execute code that interacts with external services
     // All code is retried automatically on failure
     // Read more about Inngest steps: https://www.inngest.com/docs/learn/inngest-steps
-    const reply = await step.run("create-ai-reply", async () => {
+    const reply = await step.run("generate_shopping_list", async () => {
       if (OPENAI_API_KEY) {
-        const openai = new OpenAI();
-        const completion = await openai.chat.completions.create({
-          messages: [
-            {
-              role: "system",
-              content: `Only answer with a json in the following format:
-                {
-                  [key: meal of the day as string]: {
-                    "recipe_name": string,
-                    "prep_time": number in minutes,
-                    "cooking_time": number in minutes,
-                    "cost": number in GBP
-                    "kcal": number as kcal
-                  }
-                }. Suggest a meal plan for a day containing breakfast, lunch and dinner, as follows:`,
+        if (event.data.plan.shoppin_list === undefined) {
+          const plan: IWeekPlan = event.data.plan.meals;
+          const generateMealPlanContents = Object.values(plan.meals).reduce(
+            (acc1, meal) => {
+              return (
+                acc1 +
+                `${Object.values(meal).reduce(
+                  (acc2, meal) =>
+                    acc2 +
+                    `${meal?.recipe_name ? `${meal?.recipe_name}, ` : ""}`,
+                  ""
+                )}`
+              );
             },
-            { role: "user", content: message?.text },
-          ],
-          model: "gpt-3.5-turbo",
-        });
-        console.log("completion", completion);
-        return completion.choices[0]?.message.content
-          ? completion.choices[0]?.message.content
-          : { error: "Unexpected OpenAI response" };
+            ""
+          );
+          const openai = new OpenAI();
+          const completion = await openai.chat.completions.create({
+            messages: [
+              {
+                role: "system",
+                content: `Only answer with a json in the following format: {[key: shopping_list_item]: quantity as string}`,
+              },
+              {
+                role: "assistant",
+                content: `Suggest a shopping list for a weekly meal plan containing ${generateMealPlanContents}`,
+              },
+            ],
+            model: "gpt-3.5-turbo",
+          });
+
+          return completion.choices[0]?.message.content
+            ? completion.choices[0]?.message.content
+            : { error: "Unexpected OpenAI response" };
+        } else return undefined;
       } else {
         return {
           error: "Add OPENAI_API_KEY environment variable to get AI responses.",
         };
-        // const dummy_content = `{
-        //   "breakfast": {
-        //     "recipe_name": "Mediterranean Scrambled Eggs",
-        //     "prep_time": 5,
-        //     "cooking_time": 10,
-        //     "cost": 4,
-        //     "calories": 250
-        //   },
-        //   "lunch": {
-        //     "recipe_name": "Asian Chicken Salad",
-        //     "prep_time": 10,
-        //     "cooking_time": 15,
-        //     "cost": 10,
-        //     "calories": 300
-        //   },
-        //   "dinner": {
-        //     "recipe_name": "Grilled Lemon Herb Salmon",
-        //     "prep_time": 5,
-        //     "cooking_time": 15,
-        //     "cost": 7,
-        //     "calories": 350
-        //   }
-        // }`;
-        // return dummy_content;
       }
     });
 
-    await step.run("add-reply-to-message", async () => {
+    await step.run("add-shopping-list-to-mealplan", async () => {
       if (typeof reply === "string") {
-        return await prisma.aiReplyMessages.create({
-          data: { messageId: message.xata_id, text: reply, author: "AI" },
+        await prisma.mealPlan.update({
+          where: { xata_id: event.data.plan.id },
+          data: { shopping_list: reply },
         });
       }
     });

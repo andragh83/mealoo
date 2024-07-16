@@ -1,6 +1,5 @@
 import { SignedIn, SignedOut } from "@clerk/nextjs";
 import GenerateIdesForm from "../../components/forms/generateIdeasForm";
-import { prisma } from "@/prisma/client";
 import TopBarDesktop from "@/components/navs/topBar";
 import SideNavDesktop from "@/components/navs/sideNav";
 import WeekSection from "@/components/sections/weekSection";
@@ -9,10 +8,10 @@ import {
   updateMealPlan,
   createMessage,
   createWeekMealPlan,
-  getAiReplyMessage,
   getMealPlan,
 } from "../actions";
 import BottomNavMobile from "@/components/navs/bottomNavMobile";
+import { auth } from "@clerk/nextjs/server";
 
 export default async function CreatePage({
   params,
@@ -27,31 +26,16 @@ export default async function CreatePage({
       ? searchParams.weekday
       : searchParams.weekday[0]);
 
-  const message_id =
-    searchParams.message_id &&
-    (typeof searchParams.message_id === "string"
-      ? searchParams.message_id
-      : searchParams.message_id[0]);
-
   const plan_id =
     searchParams.plan_id &&
     (typeof searchParams.plan_id === "string"
       ? searchParams.plan_id
       : searchParams.plan_id[0]);
 
-  const currentMessage = message_id
-    ? await prisma.aiReplyMessages.findFirst({
-        where: {
-          messageId: message_id,
-        },
-        orderBy: {
-          xata_createdat: "desc",
-        },
-      })
-    : undefined;
+  const { userId } = auth();
 
-  const aiReply = message_id ? await getAiReplyMessage(message_id) : undefined;
-  const currentMealPlan = plan_id ? await getMealPlan(plan_id) : undefined;
+  const currentMealPlan =
+    plan_id && userId ? await getMealPlan(userId, plan_id) : undefined;
 
   return (
     <main className="flex min-h-dvh flex-col items-center relative bg-neutral-50 dark:bg-black">
@@ -72,9 +56,7 @@ export default async function CreatePage({
                     createWeekMealPlan={createWeekMealPlan}
                   />
                   <GenerateIdesForm
-                    aiReply={{ data: aiReply?.text }}
                     activeWeekDay={active_weekday as IDaysOfTheWeek}
-                    currentMessage={currentMessage}
                     createMessage={createMessage}
                     createWeekMealPlan={createWeekMealPlan}
                     currentWeekMealPlan={currentMealPlan}

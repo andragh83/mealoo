@@ -12,6 +12,7 @@ import {
   getAiReplyMessage,
   getMealPlan,
 } from "../actions";
+import BottomNavMobile from "@/components/navs/bottomNavMobile";
 
 export default async function CreatePage({
   params,
@@ -54,14 +55,16 @@ export default async function CreatePage({
 
   return (
     <main className="flex min-h-dvh flex-col items-center relative bg-neutral-50 dark:bg-black">
-      <div className="z-10 w-full max-w-7xl flex flex-col flex-1 px-10">
+      <div className="z-10 w-full max-w-7xl flex flex-col flex-1 px-6 lg:px-10">
         <TopBarDesktop subpage={"Add weekly plan"} />
+
         <div className="w-full flex p-2">
           <SideNavDesktop activeRoute="create" />
-          <div className="flex-1 w-full h-full flex justify-center items-center flex-col gap-6 pb-24 pl-8">
+          <BottomNavMobile activeRoute="create" />
+          <div className="flex-1 w-full h-full flex justify-center items-center flex-col gap-6 pb-24 md:pl-8">
             <div className="flex justify-center items-center flex-col gap-6 w-full">
               <SignedIn>
-                <div className="flex gap-10">
+                <div className="flex flex-col-reverse gap-10 lg:flex-row">
                   <WeekSection
                     currentWeekMealPlan={currentMealPlan}
                     activeWeekDay={active_weekday as IDaysOfTheWeek}

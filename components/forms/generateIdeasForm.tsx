@@ -110,8 +110,6 @@ export default function GenerateIdeasForm(props: {
     }
   };
 
-  console.log("sending", sending);
-
   return (
     <div className="w-full flex flex-col items-start gap-4 rounded-lg">
       <label className="w-full flex flex-col gap-4 font-raleway text-md">

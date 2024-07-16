@@ -4,6 +4,8 @@ import DaySection from "./daySection";
 import { usePathname, useRouter } from "next/navigation";
 import PlanNameForm from "../forms/nameForm";
 import { useAuth } from "@clerk/nextjs";
+import { useEffect, useState } from "react";
+import EditPen from "../icons/svgs/editPen";
 
 const weekdays: { id: IDaysOfTheWeek; txt: string }[] = [
   { id: "monday", txt: "MO" },
@@ -49,10 +51,7 @@ export default function WeekSection({
   const onDayClick = (dayid: string) => {
     const searchParams = new URLSearchParams(window.location.search);
 
-    if (
-      currentWeekMealPlan &&
-      !currentWeekMealPlan?.meals[activeWeekDay].breakfast?.recipe_name
-    ) {
+    if (activeWeekDay !== dayid) {
       if (searchParams.get("message_id")) {
         searchParams.delete("message_id");
       }
@@ -95,20 +94,53 @@ export default function WeekSection({
     }
   };
 
+  const [isNameEditActive, setIsNameEditActive] = useState(false);
+
+  useEffect(() => {
+    if (currentWeekMealPlan?.name) {
+      setIsNameEditActive(false);
+    }
+  }, []);
+
+  console.log("cond ", isNameEditActive);
+
   return (
     <>
       <div className="w-full flex flex-col items-start gap-6 rounded-lg">
-        <label className="w-full flex flex-col gap-6 font-raleway text-lg uppercase">
-          Select a day and let’s cook up some ideas
-          <PlanNameForm
-            currentMealPlan={
-              currentWeekMealPlan ? currentWeekMealPlan : undefined
-            }
-            updateMealPlanName={(v: string) => {
-              saveName(v);
-            }}
-          />
-        </label>
+        <div className="w-full flex flex-col gap-2 lg:gap-6">
+          <h1 className="hidden lg:block font-raleway text-lg uppercase">
+            Select a day and let’s cook up some ideas
+          </h1>
+          {isNameEditActive ||
+          !currentWeekMealPlan ||
+          !currentWeekMealPlan.name ? (
+            <PlanNameForm
+              currentMealPlan={
+                currentWeekMealPlan ? currentWeekMealPlan : undefined
+              }
+              updateMealPlanName={(v: string) => {
+                saveName(v);
+              }}
+              cancelEdit={
+                currentWeekMealPlan?.name
+                  ? () => setIsNameEditActive(false)
+                  : undefined
+              }
+            />
+          ) : (
+            <button
+              className="w-auto text-left flex gap-2"
+              onClick={() => {
+                setIsNameEditActive(true);
+              }}
+            >
+              <span className="font-raleway_semibold text-lg">
+                {currentWeekMealPlan.name}
+              </span>
+              <EditPen colour="#8AA100" size={14} />
+            </button>
+          )}
+        </div>
         <div className="mt-4 w-full flex flex-col">
           <div className="flex items-center">
             {weekdays.map((day, i) => {
@@ -118,7 +150,7 @@ export default function WeekSection({
                   onClick={() => onDayClick(day.id)}
                   className={`w-full px-2 py-1 rounded-t-md shadow-md ${
                     activeWeekDay === day.id
-                      ? "bg-primary dark:bg-primary"
+                      ? "bg-primary dark:bg-primary dark:text-black"
                       : "bg-white dark:bg-zinc-800"
                   }`}
                 >

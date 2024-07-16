@@ -19,6 +19,7 @@
     "openai": "^4.52.2",
     "pg": "^8.12.0",
     "react": "^18",
+    "react-animate-height": "^3.2.3",
     "react-dom": "^18"
   },
   "devDependencies": {

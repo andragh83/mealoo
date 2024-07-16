@@ -1,5 +1,4 @@
 "use client";
-import { useState } from "react";
 import MealCardSmall from "../cards/mealCardSmall";
 import { IDayMeal, IDayPlan, IDaysOfTheWeek } from "../cards/types";
 
@@ -23,7 +22,7 @@ export default function AiIdeasForm({
         just try again. Careful though, there is a maximum of 50 times you can
         generate day plans on the free tier.
       </p>
-      <div className="grid grid-cols-2 gap-6">
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
         {Object.entries(meals).map(([key, value], i) => {
           return value ? (
             <MealCardSmall meal={{ ...value, variant: key as IDayMeal }} />

@@ -3,17 +3,19 @@ import CreatePlanIcon from "../icons/svgs/createPlanIcon";
 import PlansIcon from "../icons/svgs/plansIcon";
 import DashboardIcon from "../icons/svgs/dashboardIcon";
 
-export default function SideNavDesktop({
+export default function BottomNavMobile({
   activeRoute,
 }: {
   activeRoute?: string;
 }) {
   return (
-    <div className="flex-col items-center gap-6 py-6 hidden md:flex">
+    <div className="gap-6 py-0 flex items-center justify-center md:hidden !fixed bottom-0 left-0 right-0 bg-white dark:bg-black shadow-2xl">
       <Link
         href="/dashboard"
         className={
-          activeRoute === "dashboard" ? "p-2 gap-1 bg-[#E6F6C3]" : "p-2 gap-1"
+          activeRoute === "dashboard"
+            ? "flex flex-col items-center w-20 p-2 gap-1 bg-[#E6F6C3]"
+            : "flex flex-col items-center w-20 p-2 gap-1"
         }
       >
         <DashboardIcon
@@ -33,8 +35,8 @@ export default function SideNavDesktop({
         href="/create"
         className={
           activeRoute === "create"
-            ? "w-full p-2 gap-1 bg-[#E6F6C3]"
-            : "w-full p-2 gap-1"
+            ? "flex flex-col items-center w-20 p-2 gap-1 bg-[#E6F6C3]"
+            : "flex flex-col items-center w-20  p-2 gap-1"
         }
       >
         <CreatePlanIcon
@@ -54,8 +56,8 @@ export default function SideNavDesktop({
         href="/plans"
         className={
           activeRoute === "plans"
-            ? "w-full p-2 gap-1 bg-[#E6F6C3]"
-            : "w-full p-2 gap-1"
+            ? "flex flex-col items-center w-20 p-2 gap-1 bg-[#E6F6C3]"
+            : "flex flex-col items-center w-20 p-2 gap-1"
         }
       >
         <PlansIcon

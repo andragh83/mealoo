@@ -14,7 +14,7 @@ export default function TextAreaInput({
       <textarea
         name={name}
         required
-        className="bg-white border min-h-20 border-zinc-300 rounded-md px-4 py-2 w-full text-sm focus:outline-primary placeholder:text-sm"
+        className="bg-white dark:bg-zinc-700 border min-h-32 lg:min-h-20 border-zinc-300 dark:border-zinc-600  rounded-md px-4 py-2 w-full text-sm focus:outline-primary placeholder:text-sm"
         placeholder={placeholder}
         value={value}
         onChange={(e) => {

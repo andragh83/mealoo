@@ -18,9 +18,11 @@ const weekdays: { id: IDaysOfTheWeek; txt: string }[] = [
 export default function PlanNameForm({
   currentMealPlan,
   updateMealPlanName,
+  cancelEdit,
 }: {
   currentMealPlan: IWeekPlan | undefined;
   updateMealPlanName: (v: string) => void;
+  cancelEdit?: () => void;
 }) {
   const [name, setName] = useState(currentMealPlan ? currentMealPlan.name : "");
 
@@ -45,10 +47,18 @@ export default function PlanNameForm({
         />
         <button
           onClick={onSubmit}
-          className={`button group inline-flex whitespace-nowrap items-center justify-center gap-0.5 rounded-md font-medium tracking-tight transition-all text-sm px-6 py-2.5 text-black bg-primary hover:bg-primary`}
+          className={`button group inline-flex whitespace-nowrap items-center justify-center gap-0.5 rounded-md font-medium tracking-tight transition-all text-sm px-6 py-[8px] text-black bg-primary hover:bg-primary`}
         >
           {"Save"}
         </button>
+        {cancelEdit ? (
+          <button
+            onClick={cancelEdit}
+            className={`button group inline-flex whitespace-nowrap items-center justify-center gap-0.5 rounded-md font-medium tracking-tight transition-all text-sm px-4 py-2.5 text-black border primary-primary`}
+          >
+            {"Cancel"}
+          </button>
+        ) : null}
       </div>
     </>
   );

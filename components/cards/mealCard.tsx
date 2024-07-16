@@ -11,9 +11,9 @@ export default function MealCard({
   meal: IMeal;
 }) {
   return (
-    <div className="flex gap-[16px]">
+    <div className="flex flex-col md:flex-row gap-2 md:gap-[16px]">
       <div
-        className={`w-[200px] min-w-[200px] min-h-[200px] py-4 h-full flex flex-col items-center justify-center gap-[10px] rounded-lg ${
+        className={`w-full md:w-[200px] md:min-w-[200px] md:min-h-[200px] py-4 h-full flex flex-col items-center justify-center gap-[10px] rounded-lg ${
           variant === "lunch"
             ? `bg-lunch`
             : variant === "breakfast"
@@ -24,11 +24,18 @@ export default function MealCard({
         <p className="font-raleway text-[20px] uppercase dark:text-black">
           {variant}
         </p>
-        <Image src={dayIcons[variant]} width={100} height={100} alt={variant} />
+        <div className="hidden md:block">
+          <Image
+            src={dayIcons[variant]}
+            width={100}
+            height={100}
+            alt={variant}
+          />
+        </div>
       </div>
-      <div className="flex flex-col gap-[16px] py-2">
+      <div className="w-full flex flex-col gap-[16px] bg-white dark:bg-zinc-800 shadow-md md:shadow-none md:bg-transparent py-2 px-4 md:px-0">
         <span className="font-raleway text-[18px]">{recipe_name}</span>
-        <div className="flex flex-col gap-[4px]">
+        <div className="flex flex-col md:gap-[4px]">
           <MealLineWithIcon variant="prep_time" detail={`${prep_time}`} />
           <MealLineWithIcon variant="cooking_time" detail={`${cooking_time}`} />
           <MealLineWithIcon variant="cost" detail={`${cost}`} />

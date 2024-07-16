@@ -345,9 +345,85 @@ export async function deleteMealPlan(planid: string) {
   }
 }
 
-export async function getAllMealPlans() {
-  // Find the meal plan by name
-  const mealPlans = await prisma.mealPlan.findMany({});
+export async function getAllMealPlans(userid: string) {
+  const mealPlans = await prisma.mealPlan.findMany({
+    where: { user: userid },
+    include: {
+      days: {
+        include: {
+          meals: {
+            include: {
+              meal: true,
+            },
+          },
+        },
+      },
+    },
+  });
 
-  return mealPlans;
+  let convertedPlans = mealPlans.map((mealPlan) => {
+    let weeklyPlanMeals: IWeekPlanMeals = {
+      monday: {
+        breakfast: undefined,
+        lunch: undefined,
+        dinner: undefined,
+      },
+      tuesday: {
+        breakfast: undefined,
+        lunch: undefined,
+        dinner: undefined,
+      },
+      wednesday: {
+        breakfast: undefined,
+        lunch: undefined,
+        dinner: undefined,
+      },
+      thursday: {
+        breakfast: undefined,
+        lunch: undefined,
+        dinner: undefined,
+      },
+      friday: {
+        breakfast: undefined,
+        lunch: undefined,
+        dinner: undefined,
+      },
+      saturday: {
+        breakfast: undefined,
+        lunch: undefined,
+        dinner: undefined,
+      },
+      sunday: {
+        breakfast: undefined,
+        lunch: undefined,
+        dinner: undefined,
+      },
+    };
+
+    mealPlan.days.forEach((day) => {
+      day.meals.forEach((dayMeal) => {
+        weeklyPlanMeals[day.name as IDaysOfTheWeek] = {
+          ...weeklyPlanMeals[day.name as IDaysOfTheWeek],
+          [dayMeal.type]: {
+            recipe_name: dayMeal.meal.recipe_name,
+            prep_time: dayMeal.meal.prep_time,
+            cooking_time: dayMeal.meal.cooking_time,
+            cost: dayMeal.meal.cost,
+            kcal: dayMeal.meal.kcal,
+          },
+        };
+      });
+    });
+
+    // Structure the output to make it more readable
+    const structuredPlan: IWeekPlan = {
+      id: mealPlan.xata_id,
+      name: mealPlan.name ?? undefined,
+      meals: weeklyPlanMeals,
+    };
+
+    return structuredPlan;
+  });
+
+  return convertedPlans;
 }

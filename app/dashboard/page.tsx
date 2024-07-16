@@ -4,6 +4,7 @@ import SideNavDesktop from "@/components/navs/sideNav";
 import MealCard from "@/components/cards/mealCard";
 import MealCardSmall from "@/components/cards/mealCardSmall";
 import MealCardPlaceholder from "@/components/cards/mealCardPlaceholder";
+import BottomNavMobile from "@/components/navs/bottomNavMobile";
 
 export default async function DashboardPage({
   params,
@@ -18,6 +19,7 @@ export default async function DashboardPage({
         <TopBarDesktop subpage={"Add weekly plan"} />
         <div className="w-full flex p-2">
           <SideNavDesktop activeRoute="dashboard" />
+          <BottomNavMobile activeRoute="dashboard" />
           <div className="flex-1 w-full h-full flex justify-center items-center flex-col gap-6 pb-24">
             <div className="flex justify-center items-center flex-col gap-6">
               <SignedIn>

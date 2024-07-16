@@ -19,7 +19,7 @@ export default async function Home() {
             <div className="flex justify-center items-center flex-col gap-8">
               <SignedIn>
                 <div>
-                  <h2 className="font-righteous text-[76px] leading-[90px]">
+                  <h2 className="font-righteous text-[48px] sm:text-[64px] md:text-[76px] text-center">
                     MeaLoo
                   </h2>
                   <p className="font-raleway text-center text-[22px]">
@@ -28,7 +28,7 @@ export default async function Home() {
                 </div>
                 <LinkButton
                   text="Let's go"
-                  url="/create"
+                  url="/plans"
                   extraBtnStyle="w-full"
                   extraBtnTextStyle="!text-white"
                 />

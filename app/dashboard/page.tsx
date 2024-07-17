@@ -124,7 +124,7 @@ export default async function DashboardPage({
                 {plansCount === 0 ? (
                   <div className="w-full flex items-center flex-col gap-6">
                     <p className="font-raleway text-sm text-zinc-500">
-                      You haven't created any weekly meal plans yet.
+                      {" You haven't created any weekly meal plans yet."}
                     </p>
                     <Link
                       href={"/create"}

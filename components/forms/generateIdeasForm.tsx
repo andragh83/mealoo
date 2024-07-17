@@ -114,7 +114,7 @@ export default function GenerateIdeasForm(props: {
           sending ? "opacity-50" : ""
         }`}
       >
-        {sending ? "Generating..." : "Show me ideas"}
+        {sending ? "Generating..." : "Ask AI for ideas"}
       </button>
       <Suspense fallback={<div className="w-40 h-40 bg-red-500" />}>
         {aiReply ? (

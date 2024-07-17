@@ -84,7 +84,7 @@ export default async function CreatePage({
                 </p>
               </div>
               <div
-                className={`bg-primary dark:bg-[#434b15]  rounded-md px-[16px] py-[12px] flex justify-center items-center gap-4 w-full shadow-lg`}
+                className={`bg-primary dark:bg-[#434b15]  rounded-md px-[12px] py-[12px] flex justify-center items-center gap-4 shadow-lg`}
               >
                 <SignInButton />
               </div>

@@ -34,7 +34,7 @@ export default async function Home() {
               </div>
               <SignedIn>
                 {plansCount && plansCount > 0 ? (
-                  <div className="flex flex-row gap-6">
+                  <div className="flex flex-col-reverse w-full gap-4 sm:flex-row sm:w-auto sm:gap-6">
                     <LinkButton
                       text="See your plans"
                       url="/plans"
@@ -59,7 +59,7 @@ export default async function Home() {
               </SignedIn>
               <SignedOut>
                 <div
-                  className={`bg-primary dark:bg-[#434b15]  rounded-md px-[16px] py-[12px] flex justify-center items-center gap-4 w-full shadow-lg`}
+                  className={`bg-primary dark:bg-[#434b15]  rounded-md px-[12px] py-[12px] flex justify-center items-center gap-4 shadow-lg`}
                 >
                   <SignInButton />
                 </div>

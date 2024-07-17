@@ -149,7 +149,7 @@ export default function WeekSection({
             {weekdays.map((day, i) => {
               return (
                 <button
-                  key={`weekday_${i}`}
+                  key={`weekday_item_${i}`}
                   onClick={() => onDayClick(day.id)}
                   className={`w-full px-2 py-1 rounded-t-md shadow-md ${
                     activeWeekDay === day.id

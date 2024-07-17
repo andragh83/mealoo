@@ -37,10 +37,6 @@ export default function GenerateIdeasForm(props: {
 
   const { userId, isLoaded } = useAuth();
 
-  if (!isLoaded) {
-    return <p>Loading...</p>;
-  }
-
   const router = useRouter();
   const pathname = usePathname();
 

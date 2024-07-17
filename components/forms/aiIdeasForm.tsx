@@ -1,4 +1,5 @@
 "use client";
+import React from "react";
 import MealCardSmall from "../cards/mealCardSmall";
 import { IDayMeal, IDayPlan, IDaysOfTheWeek } from "../cards/types";
 
@@ -25,7 +26,9 @@ export default function AiIdeasForm({
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
         {Object.entries(meals).map(([key, value], i) => {
           return value ? (
-            <MealCardSmall meal={{ ...value, variant: key as IDayMeal }} />
+            <React.Fragment key={`sm_meal_card_${i}`}>
+              <MealCardSmall meal={{ ...value, variant: key as IDayMeal }} />
+            </React.Fragment>
           ) : null;
         })}
         <button

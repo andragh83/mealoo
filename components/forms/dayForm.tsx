@@ -52,7 +52,7 @@ export default function DayForm({
       >
         {Object.entries(plan).map(([key, _], i) => {
           return (
-            <React.Fragment key={`day${i}`}>
+            <React.Fragment key={`day_meal_${i}`}>
               <MealCardPlaceholder variant={key as IDayMeal} />
             </React.Fragment>
           );

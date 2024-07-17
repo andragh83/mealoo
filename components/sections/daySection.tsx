@@ -21,7 +21,7 @@ export default function DaySection({
     <div className="w-full bg-white dark:bg-zinc-800 p-6 flex flex-col gap-6">
       {Object.entries(plan).map(([key, value], i) => {
         return (
-          <React.Fragment key={`day_${i}`}>
+          <React.Fragment key={`card_day_${i}`}>
             {value && Object.keys(value).length > 0 ? (
               <MealCard meal={{ ...value, variant: key as IDayMeal }} />
             ) : (

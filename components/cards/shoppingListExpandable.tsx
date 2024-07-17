@@ -40,7 +40,7 @@ export default function ShoppingListExpandable(props: Props) {
         <div className="w-full flex flex-wrap gap-4 pt-8 pb-6">
           {Object.entries(shoppingList).map(([key, value], i) => {
             return (
-              <React.Fragment key={`day_${key}_${i}`}>
+              <React.Fragment key={`item_expense_${key}_${i}`}>
                 <div className="flex px-4 py-2 justify-between gap-6 rounded-md shadow-md bg-white dark:bg-zinc-700 dark:text-white">
                   <span className="font-raleway_light text-base"> {key}</span>
                   <span className="font-raleway_semibold text-base">{`${value}`}</span>

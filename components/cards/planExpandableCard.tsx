@@ -146,7 +146,7 @@ export default function PlanExpandableCard(props: Props) {
           <div className="flex flex-col gap-3">
             {selectedWeek ? null : (
               <p className="font-raleway text-sm ">
-                Click on a day and we'll select the corresponding week
+                {"Click on a day and we'll select the corresponding week"}
               </p>
             )}
 
@@ -161,7 +161,7 @@ export default function PlanExpandableCard(props: Props) {
                   {plan.weeks.map((obj, i) => (
                     <li
                       className="text-sm font-raleway_semibold"
-                      key={`key_${i}`}
+                      key={`week_key_${i}`}
                     >{`${format(obj.weekStart, "eeee, d MMM yyyy")} - ${format(
                       obj.weekEnd,
                       "eeee, d MMM yyyy"

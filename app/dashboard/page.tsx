@@ -55,12 +55,14 @@ export default async function DashboardPage({
                           ? Object.entries(todayMealPlans).map(
                               ([key, value], i) =>
                                 value ? (
-                                  <MealCard
-                                    meal={{
-                                      ...value,
-                                      variant: key as IDayMeal,
-                                    }}
-                                  />
+                                  <React.Fragment key={`meal_card_${i}`}>
+                                    <MealCard
+                                      meal={{
+                                        ...value,
+                                        variant: key as IDayMeal,
+                                      }}
+                                    />
+                                  </React.Fragment>
                                 ) : null
                             )
                           : null}

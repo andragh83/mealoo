@@ -4,6 +4,7 @@ import { IDayMeal, IDaysOfTheWeek, IMeal } from "./types";
 import { dayIcons } from "./cardElements/cardIcons";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
+import React from "react";
 
 export default function DayCard({
   dayOfTheWeek,
@@ -32,25 +33,27 @@ export default function DayCard({
         {mealsToShow ? (
           Object.entries(meals).map(([key, meal], i) => {
             return (
-              <Link
-                className="flex items-center gap-[12px]"
-                key={`meal_${i}`}
-                href={`/create?plan_id=${planid}&weekday=${dayOfTheWeek}`}
-              >
-                <div
-                  className={`flex items-center justify-center w-10 h-10 min-w-10 p-1 rounded-md ${`bg-${key}`}`}
+              <React.Fragment key={`day_item_card_${i}`}>
+                <Link
+                  className="flex items-center gap-[12px]"
+                  key={`meal_${i}`}
+                  href={`/create?plan_id=${planid}&weekday=${dayOfTheWeek}`}
                 >
-                  <Image
-                    src={dayIcons[key as IDayMeal]}
-                    width={24}
-                    height={24}
-                    alt={key}
-                  />
-                </div>
-                <p className="font-raleway_light text-base">
-                  {meal?.recipe_name}
-                </p>
-              </Link>
+                  <div
+                    className={`flex items-center justify-center w-10 h-10 min-w-10 p-1 rounded-md ${`bg-${key}`}`}
+                  >
+                    <Image
+                      src={dayIcons[key as IDayMeal]}
+                      width={24}
+                      height={24}
+                      alt={key}
+                    />
+                  </div>
+                  <p className="font-raleway_light text-base">
+                    {meal?.recipe_name}
+                  </p>
+                </Link>
+              </React.Fragment>
             );
           })
         ) : (

@@ -11,6 +11,7 @@ import PlanExpandableCard from "@/components/cards/planExpandableCard";
 import ChevronRight from "@/components/icons/svgs/chevronRight";
 import Link from "next/link";
 import BottomNavMobile from "@/components/navs/bottomNavMobile";
+import React from "react";
 
 export default async function PlansPage({
   params,
@@ -35,12 +36,14 @@ export default async function PlansPage({
               <div className="flex justify-center items-center flex-col gap-6 w-full md:px-8">
                 <div className="flex flex-col gap-4 w-full">
                   {plans && plans.length > 0 ? (
-                    plans?.map((plan) => (
-                      <PlanExpandableCard
-                        plan={plan}
-                        deletePlan={deleteMealPlan}
-                        assign={assignMealPlanToWeek}
-                      />
+                    plans?.map((plan, i) => (
+                      <React.Fragment key={`plan_card_${i}`}>
+                        <PlanExpandableCard
+                          plan={plan}
+                          deletePlan={deleteMealPlan}
+                          assign={assignMealPlanToWeek}
+                        />
+                      </React.Fragment>
                     ))
                   ) : (
                     <div className="round-lg bg-light_pastel_teal flex flex-col py-2 px-8 shadow-md">

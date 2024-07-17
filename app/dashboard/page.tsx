@@ -33,7 +33,6 @@ export default async function DashboardPage({
 
   const today = new Date();
 
-  console.log(currentPlan && currentPlan[0]);
   return (
     <main className="flex min-h-dvh flex-col items-center relative bg-neutral-50 dark:bg-black">
       <SignedIn>
@@ -44,7 +43,7 @@ export default async function DashboardPage({
             <BottomNavMobile activeRoute="dashboard" />
             <div className="flex-1 w-full h-full flex justify-center items-center flex-col gap-6 pb-24">
               <div className="flex justify-center items-center flex-col gap-6">
-                <div className="flex flex-col sm:flex-row gap-6 md:pl-6 ">
+                <div className="flex flex-col sm:flex-row gap-6 md:pl-6">
                   {currentPlan && currentPlan[0] ? (
                     <div className="rounded-lg py-8 px-6 md:px-12 shadow-lg bg-white dark:bg-zinc-800">
                       <h1 className="font-raleway_semibold text-[24px] lg:text-[28px] uppercase">
@@ -97,12 +96,14 @@ export default async function DashboardPage({
                           : null}
                       </div>
                     ) : (
-                      <Link
-                        href={"/plans"}
-                        className="flex justify-center items-center px-4 py-2 h-full w-full rounded-lg border border-primary bg-lime-50 text-black dark:text-black text-sm font-raleway"
-                      >
-                        Assign a plan for this week
-                      </Link>
+                      <div className="w-full flex items-center">
+                        <Link
+                          href={"/plans"}
+                          className="flex justify-center items-center px-10 py-2 h-20 rounded-lg border border-primary bg-lime-50 text-black dark:text-black text-sm font-raleway"
+                        >
+                          Assign a plan for this week
+                        </Link>
+                      </div>
                     )}
                   </div>
                 </div>

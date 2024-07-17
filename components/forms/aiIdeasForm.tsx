@@ -44,12 +44,7 @@ export default function AiIdeasForm({
           !daySelected || isSending ? "opacity-50" : ""
         }`}
         onClick={() => {
-          saveMeals(
-            Object.entries(meals).map(([key, value], i) => ({
-              ...value,
-              variant: key as IDayMeal,
-            }))
-          );
+          saveMeals(meals);
         }}
       >
         {isSending

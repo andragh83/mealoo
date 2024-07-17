@@ -3,8 +3,13 @@ import Image from "next/image";
 import hero_img from "./hero_img.jpg";
 import TopBarDesktop from "@/components/navs/topBar";
 import LinkButton from "@/components/buttons/linkButton";
+import { auth } from "@clerk/nextjs/server";
+import { prisma } from "@/prisma/client";
 
 export default async function Home() {
+  const { userId } = auth();
+  const plansCount = userId ? await prisma.mealPlan.count() : undefined;
+
   return (
     <main className="flex min-h-screen flex-col items-center justify-between p-24 relative">
       <Image
@@ -12,7 +17,7 @@ export default async function Home() {
         className="absolute left-0 right-0 top-0 bottom-0 object-cover z-0 h-dvh w-dvw"
         alt="meals"
       />
-      <div className="fixed top-0 left-0 right-0 flex flex-col items-center h-dvh w-dvw bg-gradient-to-b from-neutral-50 to-[#ffffff7c] dark:from-black dark:to-[#00000088]">
+      <div className="fixed top-0 left-0 right-0 flex flex-col items-center h-dvh w-dvw bg-gradient-to-b from-neutral-50 via-[#fafafad3] to-[#fafafaa6] dark:from-black dark:to-[#00000088]">
         <div className="z-10 w-full max-w-7xl flex flex-col flex-1 px-10">
           <SignedIn>
             <TopBarDesktop />
@@ -24,16 +29,33 @@ export default async function Home() {
                   MeaLoo
                 </h2>
                 <p className="font-raleway text-center text-[22px]">
-                  Stress free meal planning
+                  AI powered Meal planning
                 </p>
               </div>
               <SignedIn>
-                <LinkButton
-                  text="Let's go"
-                  url="/plans"
-                  extraBtnStyle="w-full"
-                  extraBtnTextStyle="!text-white"
-                />
+                {plansCount && plansCount > 0 ? (
+                  <div className="flex flex-row gap-6">
+                    <LinkButton
+                      text="See your plans"
+                      url="/plans"
+                      extraBtnStyle="bg-transparent border border-black dark:border-white w-full !bg-[#fafafa]"
+                      extraBtnTextStyle="!text-black dark:!text-white"
+                    />
+                    <LinkButton
+                      text="Create a meal plan"
+                      url="/create"
+                      extraBtnStyle="bg-black dark:bg-black text-white dark:text:white w-full"
+                      extraBtnTextStyle="!text-white"
+                    />
+                  </div>
+                ) : (
+                  <LinkButton
+                    text="Create your first meal plan"
+                    url="/create"
+                    extraBtnStyle="bg-black dark:bg-black text-white dark:text:white w-full"
+                    extraBtnTextStyle="!text-white"
+                  />
+                )}
               </SignedIn>
               <SignedOut>
                 <div

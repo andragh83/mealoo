@@ -28,8 +28,9 @@ const righteous = Righteous({
 });
 
 export const metadata: Metadata = {
-  title: "Next.js PXCI starter",
-  description: "Your next app powered by Prisma, Xata, Clerk, and Inngest.",
+  title: "MeaLoo - your AI powered meal planning assistant.",
+  description:
+    "MeaLoo makes your life simpler by removing the hustle of deciding what to eat during your busy weeks.",
 };
 
 export default function RootLayout({

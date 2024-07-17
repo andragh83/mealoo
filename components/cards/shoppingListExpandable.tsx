@@ -17,8 +17,6 @@ export default function ShoppingListExpandable(props: Props) {
     ? JSON.parse(plan.shopping_list)
     : undefined;
 
-  console.log("shoppingList", shoppingList);
-
   return (
     <div className="rounded-lg bg-light_pastel_teal dark:bg-zinc-800 flex flex-col py-4 px-4 shadow-md">
       <button

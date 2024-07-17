@@ -70,7 +70,6 @@ export default function GenerateIdeasForm(props: {
           dayMeals: meals,
         },
       });
-      setSending(false);
       if (newPlan.xata_id) {
         searchParams.append("plan_id", newPlan.xata_id);
         setTimeout(() => {
@@ -82,7 +81,7 @@ export default function GenerateIdeasForm(props: {
             }`
           );
           setSending(false);
-        }, 200);
+        }, 2000);
       }
     }
   };

@@ -10,7 +10,6 @@ export default function MealCard({
 }: {
   meal: IMeal;
 }) {
-  console.log("meal", recipe_name);
   return (
     <div className="flex flex-col lg:flex-row gap-2 lg:gap-[16px] ">
       <div

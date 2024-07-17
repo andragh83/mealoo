@@ -76,7 +76,7 @@ export default function PlanExpandableCard(props: Props) {
     <div className="rounded-lg bg-light_pastel_teal dark:bg-zinc-800 flex flex-col py-4 px-4 md:px-8 shadow-md">
       <div className="flex items-center justify-between">
         <h1 className="font-raleway text-lg md:text-[20px] text-left">
-          {plan.name}
+          {plan.name ?? "Untitled plan"}
         </h1>
         <div className="flex items-center gap-2 md:gap-4">
           <button

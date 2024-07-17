@@ -16,13 +16,13 @@ export default function LinkButton({
   return (
     <Link
       href={url}
-      className={`bg-black rounded-md px-[16px] py-[12px] flex justify-center items-center gap-4 ${
+      className={`rounded-md px-[18px] py-[12px] flex justify-center items-center gap-4 ${
         extraBtnStyle ?? ""
       } `}
     >
       {icon ?? null}
       <p
-        className={`text-raleway text-base text-center ${
+        className={`font-raleway text-base text-center whitespace-nowrap ${
           extraBtnTextStyle ?? ""
         } `}
       >

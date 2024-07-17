@@ -2,6 +2,7 @@
 const OPENAI_API_KEY = process.env.OPENAI_API_KEY;
 
 import {
+  IDayMeal,
   IDayPlan,
   IDaysOfTheWeek,
   IMeal,
@@ -105,7 +106,7 @@ export async function createMessage(message: string, userId: string) {
                     "cost": number in GBP
                     "kcal": number as kcal
                   }
-                }. Suggest a meal plan for a day containing breakfast, lunch and dinner, as follows:`,
+                }. Meal of the day key can only be "breakfast", "lunch" or "dinner". Suggest a day meal plan with breakfast, lunch and dinner, as follows:`,
           },
           { role: "user", content: message },
         ],
@@ -276,12 +277,13 @@ export async function updateMealPlan({
 
     // Upsert meals
     if (days?.dayMeals && dayToUpdate) {
-      Object.values(days?.dayMeals).forEach(async (meal) => {
-        meal &&
-          (await upsertMeal({
-            dayMeal: meal,
+      Object.entries(days?.dayMeals).forEach(async ([key, meal]) => {
+        if (meal) {
+          await upsertMeal({
+            dayMeal: { ...meal, variant: key as IDayMeal },
             dayToUpdateId: dayToUpdate?.xata_id,
-          }));
+          });
+        }
       });
     }
   }
@@ -417,7 +419,7 @@ export async function getMealPlanForCurrentWeek(userId: string) {
   });
 
   if (!currentWeek) {
-    throw new Error("No meal plans found for the current week.");
+    return undefined;
   }
 
   const convertedPlan = currentWeek.mealPlans.map((weekMealPlan) =>

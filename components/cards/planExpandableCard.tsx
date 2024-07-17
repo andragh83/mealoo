@@ -137,6 +137,11 @@ export default function PlanExpandableCard(props: Props) {
           setSelectedWeek(undefined);
         }}
       >
+        <p className="font-raleway text-sm text-zinc-400 pb-4">
+          {
+            "Once you assign a plan to a week, if the plan is for the current week, a shopping list will be generate in your dashboard in a few minutes."
+          }
+        </p>
         {confimrationModal === "deletion" ? (
           <div className="flex flex-col gap-1">
             <p className="font-raleway text-sm">{`Are you sure you want to delete ${plan.name}?`}</p>
@@ -146,7 +151,7 @@ export default function PlanExpandableCard(props: Props) {
           <div className="flex flex-col gap-3">
             {selectedWeek ? null : (
               <p className="font-raleway text-sm ">
-                {"Click on a day and we'll select the corresponding week"}
+                {"Click on a date and we'll select the corresponding week"}
               </p>
             )}
 

@@ -209,6 +209,8 @@ export async function updateMealPlan({
         data.name = planName;
       }
 
+      console.log("days", days?.dayMeals);
+
       if (
         days &&
         days.dayOfTheWeek &&

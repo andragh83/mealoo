@@ -19,10 +19,12 @@ export default function PlanNameForm({
   currentMealPlan,
   updateMealPlanName,
   cancelEdit,
+  isSending,
 }: {
   currentMealPlan: IWeekPlan | undefined;
   updateMealPlanName: (v: string) => void;
   cancelEdit?: () => void;
+  isSending?: boolean;
 }) {
   const [name, setName] = useState(currentMealPlan ? currentMealPlan.name : "");
 
@@ -49,7 +51,7 @@ export default function PlanNameForm({
           onClick={onSubmit}
           className={`button group inline-flex whitespace-nowrap items-center justify-center gap-0.5 rounded-md font-medium tracking-tight transition-all text-sm px-6 py-[8px] text-black bg-primary hover:bg-primary`}
         >
-          {"Save"}
+          {isSending ? "Saving..." : "Save"}
         </button>
         {cancelEdit ? (
           <button

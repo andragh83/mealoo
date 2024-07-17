@@ -46,6 +46,7 @@ export default function WeekSection({
 }) {
   const pathname = usePathname();
   const router = useRouter();
+  const [sending, setSending] = useState<boolean>(false);
 
   const { userId } = useAuth();
 
@@ -79,6 +80,11 @@ export default function WeekSection({
         planid: currentWeekMealPlan.id,
         planName: name,
       });
+
+      setTimeout(() => {
+        window.location.reload();
+        setSending(false);
+      }, 500);
     } else if (userId) {
       const newPlan = await createWeekMealPlan({
         userid: userId,
@@ -88,15 +94,20 @@ export default function WeekSection({
         const searchParams = new URLSearchParams(window.location.search);
         searchParams.append("plan_id", newPlan.xata_id);
 
-        router.replace(
-          `${pathname}${
-            searchParams.size > 0
-              ? `?${searchParams}`
-              : `?plan_id=${newPlan.xata_id}`
-          }`
+        setTimeout(
+          () =>
+            router.replace(
+              `${pathname}${
+                searchParams.size > 0
+                  ? `?${searchParams}`
+                  : `?plan_id=${newPlan.xata_id}`
+              }`
+            ),
+          500
         );
       }
     }
+    setSending(false);
   };
 
   const [isNameEditActive, setIsNameEditActive] = useState(false);
@@ -122,6 +133,7 @@ export default function WeekSection({
                 currentWeekMealPlan ? currentWeekMealPlan : undefined
               }
               updateMealPlanName={(v: string) => {
+                setSending(true);
                 saveName(v);
               }}
               cancelEdit={
@@ -129,6 +141,7 @@ export default function WeekSection({
                   ? () => setIsNameEditActive(false)
                   : undefined
               }
+              isSending={sending}
             />
           ) : (
             <button

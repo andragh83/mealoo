@@ -48,10 +48,10 @@ export default function GenerateIdeasForm(props: {
   };
 
   const saveMeals = async (meals: IDayPlan) => {
+    setSending(true);
     const searchParams = new URLSearchParams(window.location.search);
 
     if (props.currentWeekMealPlan && props.activeWeekDay && meals && userId) {
-      setSending(true);
       props.updateMealPlan({
         userId: userId,
         planid: props.currentWeekMealPlan.id,
@@ -60,9 +60,12 @@ export default function GenerateIdeasForm(props: {
           dayMeals: meals,
         },
       });
+      setTimeout(() => {
+        window.location.reload();
+        setSending(false);
+      }, 2000);
       setSending(false);
     } else if (userId && props.activeWeekDay) {
-      setSending(true);
       const newPlan = await props.createWeekMealPlan({
         userid: userId,
         days: {

@@ -4,11 +4,11 @@ import hero_img from "./hero_img.jpg";
 import TopBarDesktop from "@/components/navs/topBar";
 import LinkButton from "@/components/buttons/linkButton";
 import { auth } from "@clerk/nextjs/server";
-import { prisma } from "@/prisma/client";
+import { getPlansCount } from "./actions";
 
 export default async function Home() {
   const { userId } = auth();
-  const plansCount = userId ? await prisma.mealPlan.count() : undefined;
+  const plansCount = userId ? await getPlansCount(userId) : undefined;
 
   return (
     <main className="flex min-h-screen flex-col items-center justify-between p-24 relative">
@@ -38,8 +38,8 @@ export default async function Home() {
                     <LinkButton
                       text="See your plans"
                       url="/plans"
-                      extraBtnStyle="bg-transparent border border-black dark:border-white w-full !bg-[#fafafa]"
-                      extraBtnTextStyle="!text-black dark:!text-white"
+                      extraBtnStyle="bg-transparent border border-black w-full !bg-[#fafafa]"
+                      extraBtnTextStyle="!text-black"
                     />
                     <LinkButton
                       text="Create a meal plan"

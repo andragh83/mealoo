@@ -46,15 +46,15 @@ export default async function PlansPage({
                       </React.Fragment>
                     ))
                   ) : (
-                    <div className="round-lg bg-light_pastel_teal flex flex-col py-2 px-8 shadow-md">
+                    <div className="w-full flex items-center flex-col gap-6">
+                      <p className="font-raleway text-sm text-zinc-500">
+                        You haven't created any weekly meal plans yet.
+                      </p>
                       <Link
-                        className="flex items-center justify-center w-full"
                         href={"/create"}
+                        className="flex justify-center items-center px-10 py-2 h-20 rounded-lg border border-primary bg-lime-50 text-black dark:text-black text-sm font-raleway"
                       >
-                        <h1 className="font-raleway_light text-5xl text-primary_strong">
-                          +
-                        </h1>
-                        <ChevronRight colour="#8AA100" />
+                        Create a plan
                       </Link>
                     </div>
                   )}

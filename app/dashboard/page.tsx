@@ -3,7 +3,7 @@ import TopBarDesktop from "@/components/navs/topBar";
 import SideNavDesktop from "@/components/navs/sideNav";
 import MealCard from "@/components/cards/mealCard";
 import BottomNavMobile from "@/components/navs/bottomNavMobile";
-import { getMealPlanForCurrentWeek } from "../actions";
+import { getMealPlanForCurrentWeek, getPlansCount } from "../actions";
 import { auth } from "@clerk/nextjs/server";
 import { format } from "date-fns";
 import { IDayMeal, IDaysOfTheWeek } from "@/components/cards/types";
@@ -11,6 +11,7 @@ import React from "react";
 import DayCard from "@/components/cards/dayCard";
 import ShoppingListExpandable from "@/components/cards/shoppingListExpandable";
 import Link from "next/link";
+import { prisma } from "@/prisma/client";
 
 export default async function DashboardPage({
   params,
@@ -24,6 +25,8 @@ export default async function DashboardPage({
     ? await getMealPlanForCurrentWeek(userId)
     : undefined;
 
+  const plansCount = userId ? await getPlansCount(userId) : undefined;
+
   const todayWeekDay = format(new Date(), "eeee").toLowerCase();
   const todayMealPlans =
     currentPlan && currentPlan[0]
@@ -32,6 +35,8 @@ export default async function DashboardPage({
       : undefined;
 
   const today = new Date();
+
+  console.log("plansCount", plansCount);
 
   return (
     <main className="flex min-h-dvh flex-col items-center relative bg-neutral-50 dark:bg-black">
@@ -102,7 +107,7 @@ export default async function DashboardPage({
                     ) : null}
                   </div>
                 </div>
-                {!currentPlan ? (
+                {!currentPlan && plansCount && plansCount > 0 ? (
                   <div className="w-full flex items-center flex-col gap-6">
                     <p className="font-raleway text-sm text-zinc-500">
                       There are no plans assigned for the current week.
@@ -112,6 +117,20 @@ export default async function DashboardPage({
                       className="flex justify-center items-center px-10 py-2 h-20 rounded-lg border border-primary bg-lime-50 text-black dark:text-black text-sm font-raleway"
                     >
                       Assign a plan for this week
+                    </Link>
+                  </div>
+                ) : null}
+
+                {plansCount === 0 ? (
+                  <div className="w-full flex items-center flex-col gap-6">
+                    <p className="font-raleway text-sm text-zinc-500">
+                      You haven't created any weekly meal plans yet.
+                    </p>
+                    <Link
+                      href={"/create"}
+                      className="flex justify-center items-center px-10 py-2 h-20 rounded-lg border border-primary bg-lime-50 text-black dark:text-black text-sm font-raleway"
+                    >
+                      Create a plan
                     </Link>
                   </div>
                 ) : null}

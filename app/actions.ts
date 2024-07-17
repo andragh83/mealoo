@@ -431,6 +431,17 @@ export async function getMealPlanForCurrentWeek(userId: string) {
   return convertedPlan;
 }
 
+export async function getPlansCount(userid: string) {
+  const plansCount = userid
+    ? await prisma.mealPlan.count({
+        where: {
+          user: userid,
+        },
+      })
+    : null;
+  return plansCount;
+}
+
 export async function assignMealPlanToWeek(
   userId: string,
   mealPlan: IWeekPlan,

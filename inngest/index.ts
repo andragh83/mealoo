@@ -1,5 +1,5 @@
-import { askAI } from "./functions";
+import { generateShoppingList } from "./functions";
 
-export const functions = [askAI];
+export const functions = [generateShoppingList];
 
 export { inngest } from "./client";

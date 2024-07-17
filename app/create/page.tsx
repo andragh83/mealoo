@@ -1,4 +1,4 @@
-import { SignedIn, SignedOut } from "@clerk/nextjs";
+import { SignedIn, SignedOut, SignInButton } from "@clerk/nextjs";
 import GenerateIdesForm from "../../components/forms/generateIdeasForm";
 import TopBarDesktop from "@/components/navs/topBar";
 import SideNavDesktop from "@/components/navs/sideNav";
@@ -39,15 +39,15 @@ export default async function CreatePage({
 
   return (
     <main className="flex min-h-dvh flex-col items-center relative bg-neutral-50 dark:bg-black">
-      <div className="z-10 w-full max-w-7xl flex flex-col flex-1 px-6 lg:px-10">
-        <TopBarDesktop subpage={"Add weekly plan"} />
+      <SignedIn>
+        <div className="z-10 w-full max-w-7xl flex flex-col flex-1 px-4 lg:px-10">
+          <TopBarDesktop subpage={"Add weekly plan"} />
 
-        <div className="w-full flex p-2">
-          <SideNavDesktop activeRoute="create" />
-          <BottomNavMobile activeRoute="create" />
-          <div className="flex-1 w-full h-full flex justify-center items-center flex-col gap-6 pb-24 md:pl-8">
-            <div className="flex justify-center items-center flex-col gap-6 w-full">
-              <SignedIn>
+          <div className="w-full flex p-2">
+            <SideNavDesktop activeRoute="create" />
+            <BottomNavMobile activeRoute="create" />
+            <div className="flex-1 w-full h-full flex justify-center items-center flex-col gap-6 pb-24 md:pl-8">
+              <div className="flex justify-center items-center flex-col gap-6 w-full">
                 <div className="flex flex-col-reverse gap-10 lg:flex-row">
                   <WeekSection
                     currentWeekMealPlan={currentMealPlan}
@@ -63,14 +63,35 @@ export default async function CreatePage({
                     updateMealPlan={updateMealPlan}
                   />
                 </div>
-              </SignedIn>
-              <SignedOut>
-                <h1>Sign in to create new messages</h1>
-              </SignedOut>
+              </div>
             </div>
           </div>
         </div>
-      </div>
+      </SignedIn>
+      <SignedOut>
+        <div className="z-10 w-full max-w-7xl flex flex-col flex-1 px-10">
+          <SignedIn>
+            <TopBarDesktop />
+          </SignedIn>
+          <div className="w-full min-h-dvh flex justify-center items-center flex-col gap-6 pb-24">
+            <div className="flex justify-center items-center flex-col gap-8">
+              <div>
+                <h2 className="font-righteous text-[#8AA100] text-[48px] sm:text-[64px] md:text-[76px] text-center">
+                  MeaLoo
+                </h2>
+                <p className="font-raleway text-center text-[22px]">
+                  Stress free meal planning
+                </p>
+              </div>
+              <div
+                className={`bg-primary dark:bg-[#434b15]  rounded-md px-[16px] py-[12px] flex justify-center items-center gap-4 w-full shadow-lg`}
+              >
+                <SignInButton />
+              </div>
+            </div>
+          </div>
+        </div>
+      </SignedOut>
     </main>
   );
 }

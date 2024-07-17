@@ -119,7 +119,7 @@ export function convertCurrentWeekPlanToUI(plan: any) {
   plan.mealPlan.days.forEach((day: any) => {
     day?.meals.forEach((dayMeal: any) => {
       const mealDetail: IMeal = {
-        recipe_name: dayMeal?.meal?.name,
+        recipe_name: dayMeal?.meal?.recipe_name,
         prep_time: dayMeal?.meal?.prep_time,
         cooking_time: dayMeal?.meal?.cooking_time,
         kcal: dayMeal?.meal?.kcal,
@@ -160,7 +160,7 @@ export function convertCurrentWeekPlanToUI(plan: any) {
       weekStart: week?.week?.startDate,
       weekEnd: week?.week?.endDate,
     })),
-    shopping_list: plan?.mealPlan?.shoppin_list,
+    shopping_list: plan?.mealPlan?.shopping_list,
     meals,
   };
 }

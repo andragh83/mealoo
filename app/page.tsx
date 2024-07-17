@@ -14,18 +14,20 @@ export default async function Home() {
       />
       <div className="fixed top-0 left-0 right-0 flex flex-col items-center h-dvh w-dvw bg-gradient-to-b from-neutral-50 to-[#ffffff7c] dark:from-black dark:to-[#00000088]">
         <div className="z-10 w-full max-w-7xl flex flex-col flex-1 px-10">
-          <TopBarDesktop />
+          <SignedIn>
+            <TopBarDesktop />
+          </SignedIn>
           <div className="w-full h-full flex justify-center items-center flex-col gap-6 pb-24">
             <div className="flex justify-center items-center flex-col gap-8">
+              <div>
+                <h2 className="font-righteous text-[48px] sm:text-[64px] md:text-[76px] text-center">
+                  MeaLoo
+                </h2>
+                <p className="font-raleway text-center text-[22px]">
+                  Stress free meal planning
+                </p>
+              </div>
               <SignedIn>
-                <div>
-                  <h2 className="font-righteous text-[48px] sm:text-[64px] md:text-[76px] text-center">
-                    MeaLoo
-                  </h2>
-                  <p className="font-raleway text-center text-[22px]">
-                    Stress free meal planning
-                  </p>
-                </div>
                 <LinkButton
                   text="Let's go"
                   url="/plans"
@@ -34,7 +36,11 @@ export default async function Home() {
                 />
               </SignedIn>
               <SignedOut>
-                <SignInButton />
+                <div
+                  className={`bg-primary dark:bg-[#434b15]  rounded-md px-[16px] py-[12px] flex justify-center items-center gap-4 w-full shadow-lg`}
+                >
+                  <SignInButton />
+                </div>
               </SignedOut>
             </div>
           </div>

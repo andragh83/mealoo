@@ -29,10 +29,19 @@ export default function MealCardSmall({
           <span className="font-raleway text-[18px]">{recipe_name}</span>
         </div>
         <div className="flex flex-col gap-[8px]">
-          <MealLineWithIcon variant="prep_time" detail={`${prep_time}`} sm />
-          <MealLineWithIcon variant="cooking_time" detail={`${cooking_time}`} />
-          <MealLineWithIcon variant="cost" detail={`${cost}`} />
-          <MealLineWithIcon variant="kcal" detail={`${kcal}`} />
+          <MealLineWithIcon
+            variant="prep_time"
+            detail={`${prep_time}`}
+            sm
+            unit="min"
+          />
+          <MealLineWithIcon
+            variant="cooking_time"
+            detail={`${cooking_time}`}
+            unit="min"
+          />
+          <MealLineWithIcon variant="cost" detail={`${cost}`} unit="GBP" />
+          <MealLineWithIcon variant="kcal" detail={`${kcal}`} unit="kcal" />
         </div>
         {url ? (
           <LinkButton

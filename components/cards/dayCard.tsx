@@ -1,3 +1,4 @@
+"use client";
 import Image from "next/image";
 import { IDayMeal, IDaysOfTheWeek, IMeal } from "./types";
 import { dayIcons } from "./cardElements/cardIcons";
@@ -21,13 +22,13 @@ export default function DayCard({
   const router = useRouter();
 
   return (
-    <div className="flex flex-col rounded-lg w-full ">
+    <div className="flex flex-col rounded-lg w-full h-full">
       <div className={`px-4 py-2 rounded-t-lg bg-pastel_teal dark:bg-primary`}>
         <p className="font-raleway text-[20px] capitalize dark:text-black">
           {dayOfTheWeek}
         </p>
       </div>
-      <div className="flex flex-col gap-[12px] p-4 rounded-lg bg-white dark:bg-zinc-700 shadow-md">
+      <div className="flex flex-col gap-[12px] p-4 rounded-lg bg-white dark:bg-zinc-700 shadow-md h-full">
         {mealsToShow ? (
           Object.entries(meals).map(([key, meal], i) => {
             return (

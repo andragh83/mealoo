@@ -14,14 +14,16 @@ const images = {
 export default function MealLineWithIcon({
   detail,
   variant,
+  unit,
   sm,
 }: {
   detail: string;
+  unit: "GBP" | "min" | "kcal";
   variant: IRecipeDetail;
   sm?: boolean;
 }) {
   return (
-    <div className="flex w-full justify-between">
+    <div className="flex w-full justify-between gap-6">
       <div className={`flex gap-4`}>
         <div className="min-w-6 flex justify-center">
           <Image
@@ -41,8 +43,13 @@ export default function MealLineWithIcon({
           {variant.replace("_", "")}
         </p>
       </div>
-      <p className={`font-raleway-bold  ${sm ? "text-sm" : "text-base"}`}>
-        {detail}
+      <p
+        className={`font-raleway-bold whitespace-nowrap ${
+          sm ? "text-sm" : "text-base"
+        }`}
+      >
+        {unit === "GBP" ? "£ " : null} {detail}
+        {unit === "GBP" ? null : ` ${unit}`}
       </p>
     </div>
   );

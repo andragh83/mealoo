@@ -9,6 +9,7 @@ import { DatePickerProps, Modal } from "antd";
 import { DatePicker } from "antd";
 import { endOfWeek, format, startOfWeek } from "date-fns";
 import { useAuth } from "@clerk/nextjs";
+import AddIcon from "../icons/svgs/addIcon";
 
 type Props = {
   plan: IWeekPlan;
@@ -22,7 +23,7 @@ type Props = {
 };
 
 export default function PlanExpandableCard(props: Props) {
-  const { userId, isLoaded } = useAuth();
+  const { userId } = useAuth();
   const [isOpen, setIsOpen] = useState(false);
   const [selectedWeek, setSelectedWeek] = useState<
     { display: string; weekStart: Date; weekEnd: Date } | undefined
@@ -72,27 +73,35 @@ export default function PlanExpandableCard(props: Props) {
   };
 
   return (
-    <div className="rounded-lg bg-light_pastel_teal dark:bg-zinc-800 flex flex-col py-4 px-8 shadow-md">
+    <div className="rounded-lg bg-light_pastel_teal dark:bg-zinc-800 flex flex-col py-4 px-4 md:px-8 shadow-md">
       <div className="flex items-center justify-between">
-        <h1 className="font-raleway text-[20px] text-left">{plan.name}</h1>
-        <div className="flex items-center gap-4">
+        <h1 className="font-raleway text-lg md:text-[20px] text-left">
+          {plan.name}
+        </h1>
+        <div className="flex items-center gap-2 md:gap-4">
           <button
             onClick={() => setConfirmationModal("assign")}
-            className={`py-2 px-4 flex justify-center items-center border rounded-md ${
+            className={`w-10 h-10 flex justify-center items-center border rounded-md ${
               numberOfMeals < 21
                 ? "border-zinc-300 text-zinc-300 dark:text-zinc-500 dark:border-zinc-500"
                 : "border-zinc-300 dark:border-zinc-500"
             }`}
             disabled={numberOfMeals < 21}
           >
-            Assign
+            <AddIcon
+              colour={
+                numberOfMeals < 21
+                  ? `fill-zinc-200 dark:fill-zinc-500`
+                  : `fill-primary_strong dark:fill-primary_strong`
+              }
+            />
           </button>
 
           <button
             onClick={() => setConfirmationModal("deletion")}
-            className="py-2 px-4 flex justify-center items-center border border-zinc-300 dark:border-zinc-500 rounded-md"
+            className="w-10 h-10 flex justify-center items-center border border-red-300 dark:border-red-300 rounded-md"
           >
-            Delete plan
+            <CloseIcon size={12} colour={`fill-red-600 dark:fill-red-600`} />
           </button>
           <button
             onClick={() => {
@@ -100,7 +109,11 @@ export default function PlanExpandableCard(props: Props) {
             }}
             className="w-10 h-10 flex justify-center items-center border border-zinc-300 dark:border-zinc-500 rounded-md"
           >
-            {isOpen ? <CloseIcon size={12} /> : <ChevronRight size={14} />}
+            <div
+              className={`${isOpen ? "rotate-90 transition" : "transition"}`}
+            >
+              <ChevronRight />
+            </div>
           </button>
         </div>
       </div>

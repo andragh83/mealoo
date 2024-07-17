@@ -433,10 +433,6 @@ export async function assignMealPlanToWeek(
   weekStart: Date,
   weekEnd: Date
 ) {
-  // const today = new Date();
-  // const weekStart = startOfWeek(today, { weekStartsOn: 1 }); // Assuming the week starts on Monday
-  // const weekEnd = endOfWeek(today, { weekStartsOn: 1 });
-
   // Find or create the current week
   let currentWeek = await prisma.week.findFirst({
     where: {
@@ -458,7 +454,7 @@ export async function assignMealPlanToWeek(
     });
   }
 
-  // Assign the meal plan to the current week
+  // Assign the meal plan to the week
   await prisma.weekMealPlan.upsert({
     where: {
       weekId_mealPlanId: {
@@ -473,11 +469,12 @@ export async function assignMealPlanToWeek(
     },
   });
 
-  if (mealPlan.shopping_list === undefined) {
+  if (!mealPlan.shopping_list) {
     await inngest.send({
-      name: "ai_generate_shopping_list",
+      name: "app/ai.generate.shopping.list",
       data: {
-        plan: mealPlan,
+        planid: mealPlan.id,
+        userid: userId,
       },
     });
   }

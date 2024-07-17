@@ -9,7 +9,7 @@ export default function SideNavDesktop({
   activeRoute?: string;
 }) {
   return (
-    <div className="flex-col items-center gap-6 py-6 hidden md:flex">
+    <div className="flex-col items-center gap-6 hidden md:flex">
       <Link
         href="/dashboard"
         className={

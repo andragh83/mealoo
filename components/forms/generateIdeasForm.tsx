@@ -64,7 +64,6 @@ export default function GenerateIdeasForm(props: {
         window.location.reload();
         setSending(false);
       }, 2000);
-      setSending(false);
     } else if (userId && props.activeWeekDay) {
       const newPlan = await props.createWeekMealPlan({
         userid: userId,

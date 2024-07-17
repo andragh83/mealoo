@@ -95,6 +95,10 @@ export default function GenerateIdeasForm(props: {
         Let MeaLoo know your favorite proteins and veggies or whether you’re in
         the mood for healthy eating or comfort food or which type of cuisine you
         are interested in.
+        <p className="font-raleway text-xs text-red-600 italic">
+          Disclamer: This is a hobby showcase application and runs on very low
+          costs, therefore there is a maximum of 21 AI ideas a user can request.
+        </p>
         <TextAreaInput
           name="message"
           placeholder="I would like the meals to be high in protein and low in kcal, from international, asian or mediterranean meals and to have low cooking time."

@@ -17,22 +17,27 @@ Below you can have a look at the initial UI designs I made in Figma. Actual UI w
 
 How the app works:
 
-- The app features a homepage with sign in/sign out functionality using Clerk
-- An authenticated route, with the meal plan creation UI
-- An authenticated route, with the created meal plans and deletion functionality
-- User's messages are sent to/read from Xata using Prisma ORM
-- The messages are then sent to OpenAI via an Ingest function in order to generate daily meal plans ideas
-- The Ingest function response from OpenAI is used to populate the UI
-- The user can save the AI suggested daily plan into a weekly meal plan that gets added to the xata database
+The app has 3 pages: 
+- a dashboard where users can easily access the meal plan assigned to the current week, 
+- a creation page where users can create weekly meal plans, and 
+- a plans page where users can view and manage all their plans - they can be assigned to specific weeks or deleted. 
+
+After logging in, the user is given the choice to navigate to create a plan or to view all his meal plans.
+To create a plan user adds a description of what he would like to eat on a selected weekday, and sends it to AI which generates a day meal plan. 
+The user can then save it into the weekly meal plan. 
+To complete the weekly meal plan, the user repeats this process for every day of the week.
+
+After completing a weekly meal plan, this can be assigned to a specific week. Only complete plans can be assigned.
+
+When assigning a plan to a week, an Inngest function checks if it has a shopping list, and if not, it asks AI to generate one under the hood and then saves it for the user. 
+The shopping list is then viewable on the dashboard for the plans assigned to the current week
 
 ## Using the webapp on your local (part of the template description)
 
-**Clone or fork the repo**
+**Clone the repo**
 
 This boilerplate was created using [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app), has Prisma already set up (see [`./prisma`](./prisma)), as well as Inngest (see [`./inngest`](./inngest) and [`./api/inngest`](./api/inngest)).
-
 While Inngest requires an account for production, using [Inngest Dev Server](https://www.inngest.com/docs/local-development) for local development is free and doesn't require any setup.
-
 The following steps will guide you through setting up your Xata and Clerk accounts.
 
 ### 1. Xata database setup
